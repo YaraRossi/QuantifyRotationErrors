@@ -8,7 +8,13 @@ In the file roots.py you need to define the roots to the different folders:
 2. Processed Data: this folders needs to include 3 folders: 'Latitudes', 'Scaling', 'All_EQ'
 3. Figures
 
-There are empty example folders in this project, to show how it could be set up.
+Folder structure should be like this:
+Data
+- Original
+- Processed
+  - All_EQ
+  - Latitudes
+  - Scaling  
 
 
 
