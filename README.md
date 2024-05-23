@@ -49,5 +49,9 @@ Plotting the latitude data: run Kilauea4Paper_latitudesfiltering.py
 
 > Kilauea4Paper_scalingfiltering.py
 
+If you want to plot the timeseries of a specific earthquake you can run Kilauea4Paper_plotEQ.py
+
+> Kilauea4Paper_plotEQ.py
+
 > Kilauea4Paper_latitudesfiltering.py
 
