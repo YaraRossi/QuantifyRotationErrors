@@ -13,7 +13,7 @@ root_originaldata, root_savefig, root_processeddata = get_roots()
 
 def eq_kilauea(min_mag=4):
     root = root_originaldata
-    file_ = pd.read_csv('%s/Kilauea_EQ_201807_3MW.txt' % root, sep=',')
+    file_ = pd.read_csv('Kilauea_EQ_201807_3MW.txt', sep=',')
 
     file = file_[file_.mag > min_mag]
     for i in range(len(file['depth'])):
