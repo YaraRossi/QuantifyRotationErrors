@@ -1,7 +1,11 @@
 # AttitudeEquations
 
+## Create the virtual environment
+Requirements are in: requirements_env.txt
 
-# Define roots
+> pip install -r requirements_env.txt
+
+## Define roots
 In the file roots.py you need to define the roots to the different folders:
 
 1. Original Data
@@ -18,14 +22,14 @@ Data
 
 
 
-# Import data
-## To get data: run find_load_EQ.py
+## Import data
+To get data: run find_load_EQ.py
 
 > find_load_EQ.py
 
 
-# Processing data
-## To get data ready: run Kilauea4Paper.py
+## Processing data
+To get data ready: run Kilauea4Paper.py
 
 > Kilauea4Paper.py
 
@@ -39,9 +43,9 @@ The timeseries are:
 3. original amplitude and original latitude for 5 different earthquakes and volcanic eruptions.
 
 
-# Plotting data
-## Plotting the scaling data: run Kilauea4Paper_scalingfiltering.py
-## Plotting the latitude data: run Kilauea4Paper_latitudesfiltering.py
+## Plotting data
+Plotting the scaling data: run Kilauea4Paper_scalingfiltering.py
+Plotting the latitude data: run Kilauea4Paper_latitudesfiltering.py
 
 > Kilauea4Paper_scalingfiltering.py
 
