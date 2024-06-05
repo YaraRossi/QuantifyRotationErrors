@@ -1,0 +1,7 @@
+
+
+def get_roots():
+    root_originaldata = '/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/AttitudeEquation/Data'
+    root_savefig = '/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/AttitudeEquation/Figures_coding/4SSA'
+    root_processeddata = '/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/AttitudeEquation/Data/Processed'
+    return root_originaldata, root_savefig, root_processeddata
