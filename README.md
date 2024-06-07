@@ -17,6 +17,7 @@ Data
 - Original
 - Processed
   - All_EQ
+  - All_EQbig
   - Latitudes
   - Scaling  
 
@@ -29,9 +30,9 @@ To get data: run find_load_EQ.py
 
 
 ## Processing data
-To get data ready: run Kilauea4Paper.py
+To get data ready: run Kilauea4Paper_proc_rot.py
 
-> Kilauea4Paper.py
+> Kilauea4Paper_proc_rot.py
 
 It will save timeseries in mseed in a new folder, as defined by user. This is done by running the function
 makeAnglesKilauea_lat_v3 which does the attitude correction that includes either or and both of
@@ -44,13 +45,13 @@ The timeseries are:
 
 
 ## Plotting data
-Plotting the scaling data: run Kilauea4Paper_scalingfiltering.py
+Plotting the scaling data: run Kilauea4Paper_plot_scalingfiltering.py
 
-> Kilauea4Paper_latitudesfiltering.py
+> Kilauea4Paper_plot_scalingfiltering.py
 > 
 Plotting the latitude data: run Kilauea4Paper_latitudesfiltering.py
 
-> Kilauea4Paper_scalingfiltering.py
+> Kilauea4Paper_plot_latitudesfiltering.py
 
 If you want to plot the timeseries of a specific earthquake you can run Kilauea4Paper_plotEQ.py
 

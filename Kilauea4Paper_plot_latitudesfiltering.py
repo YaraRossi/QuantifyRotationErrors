@@ -94,15 +94,15 @@ for latitude in [0,15,20,30,45,60,75,90]:
         max_obs_angle_hp = max(abs(obs_angle_hp.select(channel=ch)[0].data))
         diff1 = max(abs(obs_angle_hp.select(channel=ch)[0].data - euler_angle_hp.select(channel=ch)[0].data))
         diff2 = max(abs(obs_angle_hp.select(channel=ch)[0].data - rot_angle_err_hp.select(channel=ch)[0].data))
-        ax.scatter(latitude,diff1/max_obs_angle_hp*100, s=s, marker='*', c='k')
-        ax.scatter(latitude,diff2/max_obs_angle_hp*100, s=s, marker='.', c='red')
+        ax.scatter(latitude,diff1/max_obs_angle_hp*100, s=s, marker='d', c='k')
+        ax.scatter(latitude,diff2/max_obs_angle_hp*100, s=s, marker='*', c='red')
     # lowpass
     for ch,ax in zip(['HJE','HJN','HJZ'],[axs1[0,1],axs1[1,1],axs1[2,1]]):
         max_obs_angle_lp = max(abs(obs_angle_lp.select(channel=ch)[0].data))
         diff1 = max(abs(obs_angle_lp.select(channel=ch)[0].data - euler_angle_lp.select(channel=ch)[0].data))
         diff2 = max(abs(obs_angle_lp.select(channel=ch)[0].data - rot_angle_err_lp.select(channel=ch)[0].data))
-        ax.scatter(latitude,diff1/max_obs_angle_lp*100, s=s, marker='*', c='k')
-        ax.scatter(latitude,diff2/max_obs_angle_lp*100, s=s, marker='.', c='red')
+        ax.scatter(latitude,diff1/max_obs_angle_lp*100, s=s, marker='d', c='k')
+        ax.scatter(latitude,diff2/max_obs_angle_lp*100, s=s, marker='*', c='red')
 
     ### Rotationrate
     # highpass
@@ -110,15 +110,15 @@ for latitude in [0,15,20,30,45,60,75,90]:
         max_obs_rr_hp = max(abs(obs_rr_hp.select(channel=ch)[0].data))
         diff1 = max(abs(obs_rr_hp.select(channel=ch)[0].data - euler_rr_hp.select(channel=ch)[0].data))
         diff2 = max(abs(obs_rr_hp.select(channel=ch)[0].data - rot_rr_err_hp.select(channel=ch)[0].data))
-        ax.scatter(latitude, diff1/max_obs_rr_hp*100, s=s, marker='*', c='k')
-        ax.scatter(latitude, diff2/max_obs_rr_hp*100, s=s, marker='.', c='red')
+        ax.scatter(latitude, diff1/max_obs_rr_hp*100, s=s, marker='d', c='k')
+        ax.scatter(latitude, diff2/max_obs_rr_hp*100, s=s, marker='*', c='red')
     # lowpass
     for ch, ax in zip(['HJE', 'HJN', 'HJZ'], [axs2[0, 1], axs2[1, 1], axs2[2, 1]]):
         max_obs_rr_lp = max(abs(obs_rr_lp.select(channel=ch)[0].data))
         diff1 = max(abs(obs_rr_lp.select(channel=ch)[0].data - euler_rr_lp.select(channel=ch)[0].data))
         diff2 = max(abs(obs_rr_lp.select(channel=ch)[0].data - rot_rr_err_lp.select(channel=ch)[0].data))
-        ax.scatter(latitude, diff1/max_obs_rr_lp*100, s=s, marker='*', c='k')
-        ax.scatter(latitude, diff2/max_obs_rr_lp*100, s=s, marker='.', c='red')
+        ax.scatter(latitude, diff1/max_obs_rr_lp*100, s=s, marker='d', c='k')
+        ax.scatter(latitude, diff2/max_obs_rr_lp*100, s=s, marker='*', c='red')
 
 
 for ax in [axs1,axs2]:

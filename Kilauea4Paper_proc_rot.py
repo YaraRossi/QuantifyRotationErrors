@@ -295,6 +295,7 @@ def makeAnglesKilauea_lat_v3(date_name='date_name', starttime='starttime', endti
 
 ## 1. amplitude ascaling and latitude changing
 # mw 5.3, ml 3.18m mw 5.3
+
 for date_name, starttime, endtime in zip(['201807140400','201807120400', '20180713'],
                                          [obspy.UTCDateTime('2018-07-14T05:07:45'),obspy.UTCDateTime('2018-07-12T05:12:25'),obspy.UTCDateTime('2018-07-13T00:42:12')],
                                          [obspy.UTCDateTime('2018-07-14T05:08:45'),obspy.UTCDateTime('2018-07-12T05:13:25'),obspy.UTCDateTime('2018-07-13T00:43:12')]):
@@ -308,7 +309,7 @@ for date_name, starttime, endtime in zip(['201807140400','201807120400', '201807
 
 print ('done with scaling and latitude changing!')
 
-## 2. Other earthquakes
+'''## 2. Other earthquakes
 # get time of various EQ's:
 info_eq = eq_kilauea(min_mag=4.0)
 ampscale=1
@@ -328,7 +329,7 @@ for NN in range(len(info_eq['time'])):
         date_ = date[NN]
         date_name = date_[0:4]+date_[5:7]+date_[8:10]
     except Exception as e:
-        print(starttime[NN], e)
+        print(starttime[NN], e)'''
 
 # here I calculate a couple of eq that are larger and I just want original amplitude scale and original latitude.
 # Ml 3.18m, Mw5.3, Mw5.3, Mw5.3, Ml4.36
@@ -336,4 +337,4 @@ for date_name, starttime, endtime in zip(['201807120400','20180713', '20180714',
          [obspy.UTCDateTime('2018-07-12T05:12:25'),obspy.UTCDateTime('2018-07-13T00:42:12'),obspy.UTCDateTime('2018-07-14T05:07:45'),obspy.UTCDateTime('2018-07-15T13:25:50'),obspy.UTCDateTime('2018-07-14T04:13:18')],
          [obspy.UTCDateTime('2018-07-12T05:13:25'),obspy.UTCDateTime('2018-07-13T00:43:12'),obspy.UTCDateTime('2018-07-14T05:08:45'),obspy.UTCDateTime('2018-07-15T13:26:50'),obspy.UTCDateTime('2018-07-14T04:14:18')]):
 
-    makeAnglesKilauea_lat_v3(date_name,starttime,endtime,latitude=19.420908, ampscale=1, plot=True, savedate=True, folder='All_EQ')
+    makeAnglesKilauea_lat_v3(date_name,starttime,endtime,latitude=19.420908, ampscale=1, plot=True, savedate=True, folder='All_EQbig')
