@@ -2086,3 +2086,437 @@ def filter_plotly_maxy_Kilauea(date_name='date_name', starttime='starttime', end
         # obs_a_all_lp, euler_a_all_lp, euler_a_err_all_lp
         # all three components
     return both_maxi
+
+# This one is exactly the same as the original version, but also outputs the timesereis and not just the mina nd max.
+def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', endtime='endtime', folder='mag_int',
+                               ampscale='ampscale',  magnitude='magnitude', lpfreq = 'freq', hpfreq = 'freq',
+                               plot=True, show=False):
+    #### 1.0 Import data and perform some preprocessing
+    #### 1.1 ####
+    # load data
+    df = 50
+    freq = lpfreq
+    lenmean = 4*df
+    root_import = '/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/AttitudeEquation/Data'
+    root_processed = '/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/AttitudeEquation/Data/Processed'
+    root_savefig = '/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/AttitudeEquation/Figures_coding/4Correction/%s' %folder
+    obs_acc_ = read('%s/Kilauea_%s_HNE.mseed' % (root_import, date_name))
+    obs_acc_ += read('%s/Kilauea_%s_HNN.mseed' % (root_import, date_name))
+    obs_acc_ += read('%s/Kilauea_%s_HNZ.mseed' % (root_import, date_name))
+
+    inv = read_inventory(root_import + '/station.xml')
+
+    #### 1.2 ####
+    # slice data to only include EQ
+    obs_acc_ = obs_acc_.slice(starttime, endtime)
+
+    #### 1.3 ####
+    # correct stuff:
+    # remove response from accelerations
+    obs_acc_ = obs_acc_.remove_response(inventory=inv, output='ACC')
+    obs_acc_ = obs_acc_.rotate(method='->ZNE', inventory=inv, components=["ZNE"])
+    obs_acc_ = obs_acc_.filter('lowpass', freq=int(df / 2), corners=8, zerophase=True).resample(sampling_rate=df)
+    for tr in obs_acc_:
+        tr.data = tr.data * ampscale
+
+    obs_acc = numpy.vstack([obs_acc_.select(channel='HNE')[0].data,
+                            obs_acc_.select(channel='HNN')[0].data,
+                            obs_acc_.select(channel='HNZ')[0].data])
+    # demean the data
+    offset_obs_acc = numpy.array(
+        [numpy.mean(obs_acc[0, :lenmean]), numpy.mean(obs_acc[1, :lenmean]), numpy.mean(obs_acc[2, :lenmean])])
+    obs_acc_demean = obs_acc.copy()
+    obs_acc_demean[0, :] = obs_acc_demean[0, :] - offset_obs_acc[0]
+    obs_acc_demean[1, :] = obs_acc_demean[1, :] - offset_obs_acc[1]
+    obs_acc_demean[2, :] = obs_acc_demean[2, :] - offset_obs_acc[2]
+
+    #### 1.4 import rotation data ####
+    # import observed angles
+    starttime_str = str(starttime)
+    new_starttime = starttime_str.replace(':', '_')
+    new_starttime = new_starttime.replace('-', '_')
+    new_starttime = new_starttime.replace('.', '_')
+    # 'obs_angle', 'obs_rr', 'euler_angle', 'rot_angle_err', 'euler_rr', 'rot_rr_err', 'euler_angle_tot', 'euler_rr_tot'
+    obs_a_E = read('%s/All_EQ/Kilauea_%s_%s_lat19.420908_obs_angle_HJE.mseed' % (root_processeddata, new_starttime, ampscale))
+    obs_a_N = read('%s/All_EQ/Kilauea_%s_%s_lat19.420908_obs_angle_HJN.mseed' % (root_processeddata, new_starttime, ampscale))
+    obs_a_Z = read('%s/All_EQ/Kilauea_%s_%s_lat19.420908_obs_angle_HJZ.mseed' % (root_processeddata, new_starttime, ampscale))
+    obs_a_all = obs_a_E
+    obs_a_all += obs_a_N
+    obs_a_all += obs_a_Z
+    obs_a_all = obs_a_all.filter('lowpass', freq=df / 2, corners=8, zerophase=True).resample(sampling_rate=df)
+    obs_a = numpy.vstack([obs_a_all.select(channel='HJE')[0].data, obs_a_all.select(channel='HJN')[0].data,
+                          obs_a_all.select(channel='HJZ')[0].data])
+
+    # import euler angle no earth rotation correction
+    euler_a_E = read('%s/All_EQ/Kilauea_%s_%s_lat19.420908_euler_angle_HJE.mseed' % (root_processeddata, new_starttime, ampscale))
+    euler_a_N = read('%s/All_EQ/Kilauea_%s_%s_lat19.420908_euler_angle_HJN.mseed' % (root_processeddata, new_starttime, ampscale))
+    euler_a_Z = read('%s/All_EQ/Kilauea_%s_%s_lat19.420908_euler_angle_HJZ.mseed' % (root_processeddata, new_starttime, ampscale))
+    euler_a_all = euler_a_E
+    euler_a_all += euler_a_N
+    euler_a_all += euler_a_Z
+    euler_a_all = euler_a_all.filter('lowpass', freq=df / 2, corners=8, zerophase=True).resample(sampling_rate=df)
+    euler_a = numpy.vstack([euler_a_all.select(channel='HJE')[0].data, euler_a_all.select(channel='HJN')[0].data,
+                            euler_a_all.select(channel='HJZ')[0].data])
+
+    # import rot angle with earth rotation correction
+    rot_a_err_E = read('%s/All_EQ/Kilauea_%s_%s_lat19.420908_rot_angle_err_HJE.mseed' % (root_processeddata, new_starttime, ampscale))
+    rot_a_err_N = read('%s/All_EQ/Kilauea_%s_%s_lat19.420908_rot_angle_err_HJN.mseed' % (root_processeddata, new_starttime, ampscale))
+    rot_a_err_Z = read('%s/All_EQ/Kilauea_%s_%s_lat19.420908_rot_angle_err_HJZ.mseed' % (root_processeddata, new_starttime, ampscale))
+    rot_a_err_all = rot_a_err_E
+    rot_a_err_all += rot_a_err_N
+    rot_a_err_all += rot_a_err_Z
+    rot_a_err_all = rot_a_err_all.filter('lowpass', freq=df / 2, corners=8, zerophase=True).resample(sampling_rate=df)
+    rot_a_err = numpy.vstack([rot_a_err_all.select(channel='HJE')[0].data, rot_a_err_all.select(channel='HJN')[0].data,
+                              rot_a_err_all.select(channel='HJZ')[0].data])
+
+    # import euler angle with earth rotation correction
+    euler_a_err_E = read('%s/All_EQ/Kilauea_%s_%s_lat19.420908_euler_angle_tot_HJE.mseed' % (root_processeddata, new_starttime, ampscale))
+    euler_a_err_N = read('%s/All_EQ/Kilauea_%s_%s_lat19.420908_euler_angle_tot_HJN.mseed' % ( root_processeddata, new_starttime, ampscale))
+    euler_a_err_Z = read('%s/All_EQ/Kilauea_%s_%s_lat19.420908_euler_angle_tot_HJZ.mseed' % (root_processeddata, new_starttime, ampscale))
+    euler_a_err_all = euler_a_err_E
+    euler_a_err_all += euler_a_err_N
+    euler_a_err_all += euler_a_err_Z
+    euler_a_err_all = euler_a_err_all.filter('lowpass', freq=df / 2, corners=8, zerophase=True).resample(sampling_rate=df)
+    euler_a_err = numpy.vstack([euler_a_err_all.select(channel='HJE')[0].data, euler_a_err_all.select(channel='HJN')[0].data,
+         euler_a_err_all.select(channel='HJZ')[0].data])
+
+    #### 2.0 Processing of RMSE ####
+    #### 2.1 Rotation correction ####
+    gravi = numpy.array([0, 0, 9.81])
+    NN = len(obs_acc_demean[0, :])
+    acc_obs_rc = numpy.zeros((3, NN))
+    acc_euler_rc = numpy.zeros((3, NN))
+    acc_rot_err_rc = numpy.zeros((3, NN))
+    acc_euler_err_rc = numpy.zeros((3, NN))
+    scale = -1
+    for i in range(NN):
+        data = obs_acc_demean[:, i]
+
+        phi = scale * obs_a[0, i]
+        theta = scale * obs_a[1, i]
+        psi = scale * obs_a[2, i]
+        acc_obs_rc[:, i] = rot_vec(phi, theta, psi, data + gravi) - gravi
+
+        phi = scale * euler_a[0, i]
+        theta = scale * euler_a[1, i]
+        psi = scale * euler_a[2, i]
+        acc_euler_rc[:, i] = rot_vec(phi, theta, psi, data + gravi) - gravi
+
+        phi = scale * rot_a_err[0, i]
+        theta = scale * rot_a_err[1, i]
+        psi = scale * rot_a_err[2, i]
+        acc_rot_err_rc[:, i] = rot_vec(phi, theta, psi, data + gravi) - gravi
+
+        phi = scale * euler_a_err[0, i]
+        theta = scale * euler_a_err[1, i]
+        psi = scale * euler_a_err[2, i]
+        acc_euler_err_rc[:, i] = rot_vec(phi, theta, psi, data + gravi) - gravi
+
+    ################################################################################################
+    #### 2.2 Integration to displacement ####
+    acc_obs_demean = obs_acc_.copy()
+    acc_obs_demean.select(channel='HNE')[0].data = obs_acc_demean[0, :]
+    acc_obs_demean.select(channel='HNN')[0].data = obs_acc_demean[1, :]
+    acc_obs_demean.select(channel='HNZ')[0].data = obs_acc_demean[2, :]
+
+    acc_obs_rc_m = obs_acc_.copy()
+    acc_obs_rc_m.select(channel='HNE')[0].data = acc_obs_rc[0, :]
+    acc_obs_rc_m.select(channel='HNN')[0].data = acc_obs_rc[1, :]
+    acc_obs_rc_m.select(channel='HNZ')[0].data = acc_obs_rc[2, :]
+
+    acc_euler_rc_m = obs_acc_.copy()
+    acc_euler_rc_m.select(channel='HNE')[0].data = acc_euler_rc[0, :]
+    acc_euler_rc_m.select(channel='HNN')[0].data = acc_euler_rc[1, :]
+    acc_euler_rc_m.select(channel='HNZ')[0].data = acc_euler_rc[2, :]
+
+    acc_rot_err_rc_m = obs_acc_.copy()
+    acc_rot_err_rc_m.select(channel='HNE')[0].data = acc_euler_rc[0, :]
+    acc_rot_err_rc_m.select(channel='HNN')[0].data = acc_euler_rc[1, :]
+    acc_rot_err_rc_m.select(channel='HNZ')[0].data = acc_euler_rc[2, :]
+
+    acc_euler_err_rc_m = obs_acc_.copy()
+    acc_euler_err_rc_m.select(channel='HNE')[0].data = acc_euler_err_rc[0, :]
+    acc_euler_err_rc_m.select(channel='HNN')[0].data = acc_euler_err_rc[1, :]
+    acc_euler_err_rc_m.select(channel='HNZ')[0].data = acc_euler_err_rc[2, :]
+
+    NN = len(obs_acc[0, :])
+    disp_obs_demean = acc_obs_demean.copy().integrate().integrate()
+    disp_obs = obs_acc_.copy().integrate().integrate()
+    disp_obs_rc = acc_obs_rc_m.copy().integrate().integrate()
+    disp_euler_rc = acc_euler_rc_m.copy().integrate().integrate()
+    disp_rot_err_rc = acc_rot_err_rc_m.copy().integrate().integrate()
+    disp_euler_err_rc = acc_euler_err_rc_m.copy().integrate().integrate()
+
+    #### 3.0 filter the shit out of this ####
+    # 3.1 Lowpass and highpass filter
+    both_maxi = [[],[]]
+    both_ts = [[],[]]
+    for filter_type, freq, ii in zip(['lowpass','highpass'],[lpfreq,hpfreq], range(2)):
+        # Angles
+        obs_a_all_lp = obs_a_all.copy().filter(filter_type, freq = freq, zerophase = True)
+        euler_a_all_lp = euler_a_all.copy().filter(filter_type, freq = freq, zerophase = True)
+        rot_a_err_all_lp = rot_a_err_all.copy().filter(filter_type, freq = freq, zerophase = True)
+        euler_a_err_all_lp = euler_a_err_all.copy().filter(filter_type, freq = freq, zerophase = True)
+        # Disp [disp_obs_lp, disp_obs_demean_lp, disp_obs_rc_lp, disp_euler_rc_lp, disp_euler_err_rc_lp]
+        disp_obs_lp = disp_obs.copy().filter(filter_type, freq = freq, zerophase = True)
+        disp_obs_demean_lp = disp_obs_demean.copy().filter(filter_type, freq = freq, zerophase = True)
+        disp_obs_rc_lp = disp_obs_rc.copy().filter(filter_type, freq = freq, zerophase = True)
+        disp_euler_rc_lp = disp_euler_rc.copy().filter(filter_type, freq = freq, zerophase = True)
+        disp_rot_err_rc_lp = disp_rot_err_rc.copy().filter(filter_type, freq = freq, zerophase = True)
+        disp_euler_err_rc_lp = disp_euler_err_rc.copy().filter(filter_type, freq = freq, zerophase = True)
+        # Acc [obs_acc_lp, acc_obs_demean_lp, acc_obs_rc_m_lp, acc_euler_rc_m_lp, acc_euler_err_rc_m_lp]
+        obs_acc_lp = obs_acc_.copy().filter(filter_type, freq = freq, zerophase = True)
+        acc_obs_demean_lp = acc_obs_demean.copy().filter(filter_type, freq = freq, zerophase = True)
+        acc_obs_rc_m_lp = acc_obs_rc_m.copy().filter(filter_type, freq = freq, zerophase = True)
+        acc_euler_rc_m_lp = acc_euler_rc_m.copy().filter(filter_type, freq = freq, zerophase = True)
+        acc_rot_err_rc_m_lp = acc_rot_err_rc_m.copy().filter(filter_type, freq = freq, zerophase = True)
+        acc_euler_err_rc_m_lp = acc_euler_err_rc_m.copy().filter(filter_type, freq = freq, zerophase = True)
+
+        #### 2.3 Timeseries difference ####
+        time = obs_acc_[0].times()
+
+        # rotation
+        base = obs_a_all_lp
+        data = [obs_a_all_lp, euler_a_all_lp, rot_a_err_all_lp, euler_a_err_all_lp]
+        NN = len(data)
+        ch = ['HJE','HJN','HJZ']
+        TSdiff_rot = [[[], [], []],
+                      [[], [], []],
+                      [[], [], []],
+                      [[], [], []]]
+        TSmax_rot = [[[], [], []],
+                      [[], [], []],
+                      [[], [], []],
+                      [[], [], []]]
+        TS_rot = [[[], [], []],
+                  [[], [], []],
+                  [[], [], []],
+                  [[], [], []]]
+        for j in range(NN):
+            channel = data[j]
+            for i in range(3):
+                diff = channel.select(channel=ch[i])[0].data - base.select(channel=ch[i])[0].data
+                TSdiff_rot[j][i] = diff
+
+                # find extreme value:
+                mini = numpy.min(diff[:-df])
+                maxi = numpy.max(diff[:-df])
+                if numpy.abs(mini) > maxi:
+                    TSmax_rot[j][i] = mini
+                else:
+                    TSmax_rot[j][i] = maxi
+
+                # have the first one be the amplitude of motion and not the difference which is just 0.
+                if j == 0:
+                    mini = numpy.min(channel.select(channel=ch[i])[0].data)
+                    maxi = numpy.max(channel.select(channel=ch[i])[0].data)
+                    if numpy.abs(mini) > maxi:
+                        TSmax_rot[j][i] = mini
+                    else:
+                        TSmax_rot[j][i] = maxi
+
+                TS_rot[j][i] = channel.select(channel=ch[i])[0].data
+
+        # acceleration
+        base = obs_acc_lp
+        data = [obs_acc_lp, acc_obs_demean_lp, acc_obs_rc_m_lp, acc_euler_rc_m_lp, acc_rot_err_rc_m_lp, acc_euler_err_rc_m_lp]
+        NN = len(data)
+        ch = ['HNE', 'HNN', 'HNZ']
+        TSdiff_acc = [[[], [], []],
+                      [[], [], []],
+                      [[], [], []],
+                      [[], [], []],
+                      [[], [], []],
+                      [[], [], []]]
+        TSmax_acc = [[[], [], []],
+                      [[], [], []],
+                      [[], [], []],
+                      [[], [], []],
+                      [[], [], []],
+                      [[], [], []]]
+        TS_acc = [[[], [], []],
+                  [[], [], []],
+                  [[], [], []],
+                  [[], [], []],
+                  [[], [], []],
+                  [[], [], []]]
+        for j in range(NN):
+            channel = data[j]
+            for i in range(3):
+                diff = channel.select(channel=ch[i])[0].data - base.select(channel=ch[i])[0].data
+                TSdiff_acc[j][i] = diff
+
+                # find extreme value:
+                mini = numpy.min(diff[:-df])
+                maxi = numpy.max(diff[:-df])
+                if numpy.abs(mini) > maxi:
+                    TSmax_acc[j][i] = mini
+                else:
+                    TSmax_acc[j][i] = maxi
+
+                # have the first one be the amplitude of motion and not the difference which is just 0.
+                if j == 0:
+                    mini = numpy.min(channel.select(channel=ch[i])[0].data)
+                    maxi = numpy.max(channel.select(channel=ch[i])[0].data)
+                    if numpy.abs(mini) > maxi:
+                        TSmax_acc[j][i] = mini
+                    else:
+                        TSmax_acc[j][i] = maxi
+                TS_acc[j][i] = channel.select(channel=ch[i])[0].data
+
+        # displacement
+        base = disp_obs_lp
+        data = [disp_obs_lp, disp_obs_demean_lp, disp_obs_rc_lp, disp_euler_rc_lp, disp_rot_err_rc_lp, disp_euler_err_rc_lp]
+        ch = ['HNE', 'HNN', 'HNZ']
+        NN = len(data)
+        TSdiff_disp = [[[], [], []],
+                       [[], [], []],
+                       [[], [], []],
+                       [[], [], []],
+                       [[], [], []],
+                       [[], [], []]]
+        TSmax_disp = [[[], [], []],
+                       [[], [], []],
+                       [[], [], []],
+                       [[], [], []],
+                       [[], [], []],
+                       [[], [], []]]
+        TS_disp = [[[], [], []],
+                   [[], [], []],
+                   [[], [], []],
+                   [[], [], []],
+                   [[], [], []],
+                   [[], [], []]]
+        for j in range(NN):
+            channel = data[j]
+            for i in range(3):
+                diff = channel.select(channel=ch[i])[0].data - base.select(channel=ch[i])[0].data
+                TSdiff_disp[j][i] = diff
+
+                # find extreme value:
+                mini = numpy.min(diff[:-df])
+                maxi = numpy.max(diff[:-df])
+                if numpy.abs(mini) > maxi:
+                    TSmax_disp[j][i] = mini
+                else:
+                    TSmax_disp[j][i] = maxi
+
+                # have the first one be the amplitude of motion and not the difference which is just 0.
+                if j == 0:
+                    mini = numpy.min(channel.select(channel=ch[i])[0].data)
+                    maxi = numpy.max(channel.select(channel=ch[i])[0].data)
+                    if numpy.abs(mini) > maxi:
+                        TSmax_disp[j][i] = mini
+                    else:
+                        TSmax_disp[j][i] = maxi
+
+                TS_disp[j][i] = channel.select(channel=ch[i])[0].data
+
+
+
+        if plot:
+            #### 2.4 Plot stuff ####
+
+            ######################## Plot Time Series
+            fig, axs = plt.subplots(9, 1, figsize=(11, 12), sharex=True)
+            plt.subplots_adjust(hspace=0, top=0.95, bottom=0.07)
+            plt.suptitle('TimeSeries Comparisons for an M' + str(magnitude))
+            x_ticks = ['obs. ', 'obs. \ndemeaned', 'rot', 'euler', 'rot + earth rc', 'euler + earth rc']
+
+            # rotation
+            color = ['darkred', 'red', 'tomato', 'lightcoral']
+            liner = ['--', '-.', 'dotted', '-']
+            direction = ['East', 'North', 'Up']
+            for i in range(3):
+                ax = axs[0 + i]
+                ax.set_ylabel('%s [rad]' % direction[i])
+                for j in range(4):
+                    ax.plot(time, TS_rot[j][i], linestyle=liner[j], color=color[j], label=x_ticks[2 + j])
+            ax.legend(loc='upper left')
+
+            x_ticks = ['obs.', 'obs. demeaned', 'rc. rot', 'rc. euler', 'rc. rot + earth rc', 'rc. euler + earth rc']
+            liner = ['-', (0, (3, 1, 1, 1, 1, 1)), '--', '-.', 'dotted', '-']
+            direction = ['East', 'North', 'Up']
+            # displacement
+            color = ['k', 'k', 'dimgrey', 'grey', 'darkgrey', 'lightgrey']
+            for i in range(3):
+                ax = axs[3 + i]
+                ax.set_ylabel('%s [m]' % direction[i])
+                for j in range(6):
+                    ax.plot(time, TS_disp[j][i], linestyle=liner[j], color=color[j], label=x_ticks[j])
+            ax.legend(loc='upper left')
+
+            # acceleration
+            color = ['midnightblue', 'midnightblue', 'blue', 'cornflowerblue', 'deepskyblue', 'lightblue']
+            for i in range(3):
+                ax = axs[6 + i]
+                ax.set_ylabel('%s [m/s/s]' % direction[i])
+                for j in range(6):
+                    ax.plot(time, TS_acc[j][i], linestyle=liner[j], color=color[j], label=x_ticks[j])
+            ax.legend(loc='upper left')
+
+            ax.set_xlabel('Time since %s [s]' % str(new_starttime))
+            plt.savefig('%s/TS_%s_%s_%s.png' % (root_savefig, filter_type, ampscale, str(new_starttime)), dpi=300)
+
+            ######################## Plot Difference
+
+            fig, axs = plt.subplots(9, 1, figsize=(11, 12), sharex=True)
+            plt.subplots_adjust(hspace=0, top=0.95, bottom=0.07)
+            plt.suptitle('TimeSeries Difference Comparisons for an M' + str(magnitude))
+            x_ticks = ['obs.', 'obs. \ndemeaned', 'rot', 'euler', 'rot + earth rc', 'euler + earth rc']
+
+            # rotation
+            color = ['darkred', 'red', 'tomato', 'lightcoral']
+            liner = ['--', '-.', 'dotted', '-']
+            direction = ['East', 'North', 'Up']
+            for i in range(3):
+                ax = axs[0 + i]
+                ax.set_ylabel('%s [rad]\nDifference \nto observed' % direction[i])
+                for j in range(4):
+                    ax.plot(time, TSdiff_rot[j][i], linestyle=liner[j], color=color[j], label=x_ticks[2 + j])
+                    #ax.axhline(TSmax_rot[j][i], linestyle=(0, (5, 10)), color=color[j])
+            ax.legend(loc='upper left')
+
+            x_ticks = ['obs.', 'obs. demeaned', 'rc. observed', 'rc. euler', 'rc. rot + earth rc', 'rc. euler + earth rc']
+            liner = ['-', (0, (3, 1, 1, 1, 1, 1)), '--', '-.', 'dotted', '-']
+            direction = ['East', 'North', 'Up']
+            # displacement
+            color = ['k', 'k', 'dimgrey', 'grey', 'darkgrey', 'lightgrey']
+            for i in range(3):
+                ax = axs[3 + i]
+                ax.set_ylabel('%s [m]\nDifference \nto observed' % direction[i])
+                for j in range(6):
+                    ax.plot(time, TSdiff_disp[j][i], linestyle=liner[j], color=color[j], label=x_ticks[j])
+                    #ax.axhline(TSmax_disp[j][i], linestyle=(0, (5, 10)), color=color[j])
+            ax.legend(loc='upper left')
+
+            # acceleration
+            color = ['midnightblue', 'midnightblue', 'blue', 'cornflowerblue', 'deepskyblue', 'lightblue']
+            for i in range(3):
+                ax = axs[6 + i]
+                ax.set_ylabel('%s [m/s/s]\nDifference \nto observed' % direction[i])
+                for j in range(6):
+                    ax.plot(time, TSdiff_acc[j][i], linestyle=liner[j], color=color[j], label=x_ticks[j])
+                    #ax.axhline(TSmax_acc[j][i], linestyle=(0, (5, 10)), color=color[j])
+            ax.legend(loc='upper left')
+
+            ax.set_xlabel('Time since %s [s]' % str(new_starttime))
+            plt.savefig('%s/TSdiff_%s_%s_%s.png' % (root_savefig, filter_type, ampscale, str(new_starttime)), dpi=300)
+            if show:
+                plt.show()
+
+        both_maxi[ii] = [TSmax_rot,TSmax_disp,TSmax_acc]
+        both_ts[ii] = [TS_rot, TS_disp, TS_acc]
+        # TSmax_disp
+        # disp_obs_lp, disp_obs_demean_lp, disp_obs_rc_lp, disp_euler_rc_lp, disp_euler_err_rc_lp
+        # all three components
+
+        # TSmax_acc
+        # obs_acc_lp, acc_obs_demean_lp, acc_obs_rc_m_lp, acc_euler_rc_m_lp, acc_euler_err_rc_m_lp
+        # all three components
+
+        # TSmax_rot
+        # obs_a_all_lp, euler_a_all_lp, euler_a_err_all_lp
+        # all three components
+    return both_maxi, both_ts
+# Output as: lowpass, highpass. then disp, rot and acc, then each rotation correction type, then all three components.

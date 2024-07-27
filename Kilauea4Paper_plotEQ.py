@@ -39,6 +39,6 @@ for i, ch, dir in zip(range(3),['HJE','HJN','HJZ'], ['East','North','Up']):
     ax.set_ylabel('%s [rad/s]' %dir)
 ax.set_xlabel('Time [s]')
 
-fig.savefig('%s/KilaueaEQ_Ml3_18_20180712T051241' %root_save, dpi=300)
+#fig.savefig('%s/KilaueaEQ_Ml3_18_20180712T051241' %root_save, dpi=300)
 plt.show()
 

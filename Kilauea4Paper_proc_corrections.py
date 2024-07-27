@@ -7,7 +7,7 @@ from obspy import read, read_inventory, UTCDateTime
 import matplotlib.pyplot as plt
 from numpy import mean
 from attitudeequation import earth_rotationrate, attitude_equation_simple
-from functions import makeAnglesKilauea_lat_v3, correctAccelerationKilauea_v2,filter_plotly_maxy_Kilauea
+from functions import makeAnglesKilauea_lat_v3, correctAccelerationKilauea_v2,filter_plotly_maxy_Kilauea,filter_plotly_maxy_Kilauea_v2
 from roots import get_roots
 root_originaldata, root_savefig, root_processeddata = get_roots()
 
@@ -78,6 +78,12 @@ max_disp_lp = []
 max_disp_hp = []
 max_acc_lp = []
 max_acc_hp = []
+ts_rot_lp = []
+ts_rot_hp = []
+ts_disp_lp = []
+ts_disp_hp = []
+ts_acc_lp = []
+ts_acc_hp = []
 for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, endtime, magnitude, distance):
     try:
         makeAnglesKilauea_lat_v3(date_name,starttime,endtime,latitude=19.420908, ampscale=1,
@@ -89,7 +95,9 @@ for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, en
     #correctAccelerationKilauea_v2(date_name, starttime, endtime, ampscale=1,
     #                              plot=True, savedate=False, folder='All_EQ')
     mag_int = int(magnitude)
-    both_maxi = filter_plotly_maxy_Kilauea(date_name, starttime, endtime, folder=mag_int, ampscale=1, magnitude=magnitude,
+    #both_maxi = filter_plotly_maxy_Kilauea(date_name, starttime, endtime, folder=mag_int, ampscale=1, magnitude=magnitude,
+    #                           lpfreq=0.1, hpfreq=0.1, plot=False, show=False)
+    both_maxi, both_ts = filter_plotly_maxy_Kilauea_v2(date_name, starttime, endtime, folder=mag_int, ampscale=1, magnitude=magnitude,
                                lpfreq=0.1, hpfreq=0.1, plot=False, show=False)
 
     # now save all the information from the EQ that have both data, and have been made into figures:
@@ -104,7 +112,15 @@ for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, en
     max_acc_lp.append([both_maxi[0][2][0],both_maxi[0][2][1],both_maxi[0][2][2],both_maxi[0][2][3],both_maxi[0][2][4],both_maxi[0][2][5]]) # lowpass
     max_acc_hp.append([both_maxi[1][2][0],both_maxi[1][2][1],both_maxi[1][2][2],both_maxi[1][2][3],both_maxi[1][2][4],both_maxi[1][2][5]]) # highpas
 
+    # Timeseries
+    ts_rot_lp.append([both_ts[0][0][0], both_ts[0][0][1], both_ts[0][0][2], both_ts[0][0][3]])  # lowpass
+    ts_rot_hp.append([both_ts[1][0][0], both_ts[1][0][1], both_ts[1][0][2], both_ts[1][0][3]])  # highpass
 
+    ts_disp_lp.append([both_ts[0][1][0], both_ts[0][1][1], both_ts[0][1][2], both_ts[0][1][3], both_ts[0][1][4], both_ts[0][1][5]])  # lowpass
+    ts_disp_hp.append([both_ts[1][1][0], both_ts[1][1][1], both_ts[1][1][2], both_ts[1][1][3], both_ts[1][1][4], both_ts[1][1][5]])  # highpass
+
+    ts_acc_lp.append([both_ts[0][2][0], both_ts[0][2][1], both_ts[0][2][2], both_ts[0][2][3], both_ts[0][2][4], both_ts[0][2][5]])  # lowpass
+    ts_acc_hp.append([both_ts[1][2][0], both_ts[1][2][1], both_ts[1][2][2], both_ts[1][2][3], both_ts[1][2][4], both_ts[1][2][5]])  # highpas
 
 # Now plot the error over max displacement etc.
 color = ['red', 'k', 'grey']
@@ -139,7 +155,7 @@ if minmag <4:
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
 fig.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
 
-fig.savefig('%s/Angle_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
+#fig.savefig('%s/Angle_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
 
 
 # Comparing to no rotation correction for displacement.
@@ -174,7 +190,7 @@ if minmag <4:
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
 fig.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
 
-fig.savefig('%s/Disp_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
+#fig.savefig('%s/Disp_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
 '''
 # Comparing to simple rotation correction for displacement.
 #disp_obs_demean_lp, disp_obs_rc_lp, disp_euler_rc_lp, disp_rot_err_rc_lp, disp_euler_err_rc_lp
@@ -237,5 +253,38 @@ if minmag <4:
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
 fig.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
 
-fig.savefig('%s/Acc_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
+#fig.savefig('%s/Acc_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
+
+##############################################################################
+########################## Now as time series. ##########################
+# acc_obs_demean_lp, acc_obs_rc_m_lp, acc_euler_rc_m_lp, acc_rot_err_rc_m_lp, acc_euler_err_rc_m_lp
+color = ['midnightblue','cornflowerblue','red', 'k', 'grey']
+marker = ['X','D','d','*','.']
+linestyle=['-','--','-.','dotted',(10, (3, 1, 1, 1, 1, 1))]
+labels = ['demean', 'rot', 'euler', 'rot + spin', 'euler + spin']
+fig, axs = plt.subplots(3,2, figsize=(11,5), sharex=True)
+plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
+for neq in range(len(ts_acc_hp)):
+    for j in range(1,len(ts_acc_hp[neq])):
+        maximum_error_hp = numpy.asarray(ts_acc_hp[neq][j])
+        maximum_error_lp = numpy.asarray(ts_acc_lp[neq][j])
+        for i in range(3):
+            axs[i, 0].plot(ts_acc_hp[neq][j][i],color=color[j - 1], linestyle=linestyle[j - 1])
+            axs[i, 1].plot(ts_acc_lp[neq][j][i],color=color[j - 1], linestyle=linestyle[j - 1])
+axs[0, 0].set_title('highpass 0.1 Hz')
+axs[0, 1].set_title('lowpass 0.1 Hz')
+axs[0, 0].set_ylabel('East error [%]')
+axs[1, 0].set_ylabel('North error [%]')
+axs[2, 0].set_ylabel('Up error [%]')
+axs[2, 0].set_xlabel('max amplitude [m/s/s]')
+axs[2, 1].set_xlabel('max amplitude [m/s/s]')
+if minmag <4:
+    for j in range(2):
+        for i in range(3):
+            axs[i, j].set_yscale('log')
+            axs[i, j].set_xscale('log')
+custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
+fig.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
+
+#fig.savefig('%s/Acc_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
 plt.show()
