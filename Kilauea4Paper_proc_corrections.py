@@ -273,11 +273,11 @@ for neq in range(len(ts_acc_hp)):
             axs[i, 1].plot(ts_acc_lp[neq][j][i],color=color[j - 1], linestyle=linestyle[j - 1])
 axs[0, 0].set_title('highpass 0.1 Hz')
 axs[0, 1].set_title('lowpass 0.1 Hz')
-axs[0, 0].set_ylabel('East error [%]')
-axs[1, 0].set_ylabel('North error [%]')
-axs[2, 0].set_ylabel('Up error [%]')
-axs[2, 0].set_xlabel('max amplitude [m/s/s]')
-axs[2, 1].set_xlabel('max amplitude [m/s/s]')
+axs[0, 0].set_ylabel('East [m/s/s]')
+axs[1, 0].set_ylabel('North [m/s/s]')
+axs[2, 0].set_ylabel('Up [m/s/s]')
+axs[2, 0].set_xlabel('Time [sample]')
+axs[2, 1].set_xlabel('Time [sample]')
 if minmag <4:
     for j in range(2):
         for i in range(3):
@@ -287,4 +287,34 @@ custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle
 fig.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
 
 #fig.savefig('%s/Acc_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
+
+color = ['midnightblue','cornflowerblue','red', 'k', 'grey']
+marker = ['X','D','d','*','.']
+linestyle=['-','--','-.','dotted',(10, (3, 1, 1, 1, 1, 1))]
+labels = ['demean', 'rot', 'euler', 'rot + spin', 'euler + spin']
+fig, axs = plt.subplots(3,2, figsize=(11,5), sharex=True)
+plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
+for neq in range(len(ts_disp_hp)):
+    for j in range(1,len(ts_disp_hp[neq])):
+        maximum_error_hp = numpy.asarray(ts_disp_hp[neq][j])
+        maximum_error_lp = numpy.asarray(ts_disp_lp[neq][j])
+        for i in range(3):
+            axs[i, 0].plot(ts_disp_hp[neq][j][i],color=color[j - 1], linestyle=linestyle[j - 1])
+            axs[i, 1].plot(ts_disp_lp[neq][j][i],color=color[j - 1], linestyle=linestyle[j - 1])
+axs[0, 0].set_title('highpass 0.1 Hz')
+axs[0, 1].set_title('lowpass 0.1 Hz')
+axs[0, 0].set_ylabel('East [m]')
+axs[1, 0].set_ylabel('North [m]')
+axs[2, 0].set_ylabel('Up [m]')
+axs[2, 0].set_xlabel('Time [sample]')
+axs[2, 1].set_xlabel('Time [sample]')
+if minmag <4:
+    for j in range(2):
+        for i in range(3):
+            axs[i, j].set_yscale('log')
+            axs[i, j].set_xscale('log')
+custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
+fig.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
+
+#fig.savefig('%s/Disp_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
 plt.show()
