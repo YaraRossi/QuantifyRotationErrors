@@ -2143,7 +2143,9 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
     obs_a_all = obs_a_E
     obs_a_all += obs_a_N
     obs_a_all += obs_a_Z
+    #obs_a_all.plot()
     obs_a_all = obs_a_all.filter('lowpass', freq=df / 2, corners=8, zerophase=True).resample(sampling_rate=df)
+    #obs_a_all.plot()
     obs_a = numpy.vstack([obs_a_all.select(channel='HJE')[0].data, obs_a_all.select(channel='HJN')[0].data,
                           obs_a_all.select(channel='HJZ')[0].data])
 
@@ -2253,24 +2255,25 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
     both_ts = [[],[]]
     for filter_type, freq, ii in zip(['lowpass','highpass'],[lpfreq,hpfreq], range(2)):
         # Angles
-        obs_a_all_lp = obs_a_all.copy().filter(filter_type, freq = freq, zerophase = True)
-        euler_a_all_lp = euler_a_all.copy().filter(filter_type, freq = freq, zerophase = True)
-        rot_a_err_all_lp = rot_a_err_all.copy().filter(filter_type, freq = freq, zerophase = True)
-        euler_a_err_all_lp = euler_a_err_all.copy().filter(filter_type, freq = freq, zerophase = True)
+        obs_a_all_lp = obs_a_all.copy().filter(filter_type, freq = freq, zerophase = False)
+        euler_a_all_lp = euler_a_all.copy().filter(filter_type, freq = freq, zerophase = False)
+        rot_a_err_all_lp = rot_a_err_all.copy().filter(filter_type, freq = freq, zerophase = False)
+        euler_a_err_all_lp = euler_a_err_all.copy().filter(filter_type, freq = freq, zerophase = False)
         # Disp [disp_obs_lp, disp_obs_demean_lp, disp_obs_rc_lp, disp_euler_rc_lp, disp_euler_err_rc_lp]
-        disp_obs_lp = disp_obs.copy().filter(filter_type, freq = freq, zerophase = True)
-        disp_obs_demean_lp = disp_obs_demean.copy().filter(filter_type, freq = freq, zerophase = True)
-        disp_obs_rc_lp = disp_obs_rc.copy().filter(filter_type, freq = freq, zerophase = True)
-        disp_euler_rc_lp = disp_euler_rc.copy().filter(filter_type, freq = freq, zerophase = True)
-        disp_rot_err_rc_lp = disp_rot_err_rc.copy().filter(filter_type, freq = freq, zerophase = True)
-        disp_euler_err_rc_lp = disp_euler_err_rc.copy().filter(filter_type, freq = freq, zerophase = True)
+        disp_obs_lp = disp_obs.copy().filter(filter_type, freq = freq, zerophase = False)
+        disp_obs_demean_lp = disp_obs_demean.copy().filter(filter_type, freq = freq, zerophase = False)
+        disp_obs_rc_lp = disp_obs_rc.copy().filter(filter_type, freq = freq, zerophase = False)
+        disp_euler_rc_lp = disp_euler_rc.copy().filter(filter_type, freq = freq, zerophase = False)
+        disp_rot_err_rc_lp = disp_rot_err_rc.copy().filter(filter_type, freq = freq, zerophase = False)
+        disp_euler_err_rc_lp = disp_euler_err_rc.copy().filter(filter_type, freq = freq, zerophase = False)
+
         # Acc [obs_acc_lp, acc_obs_demean_lp, acc_obs_rc_m_lp, acc_euler_rc_m_lp, acc_euler_err_rc_m_lp]
-        obs_acc_lp = obs_acc_.copy().filter(filter_type, freq = freq, zerophase = True)
-        acc_obs_demean_lp = acc_obs_demean.copy().filter(filter_type, freq = freq, zerophase = True)
-        acc_obs_rc_m_lp = acc_obs_rc_m.copy().filter(filter_type, freq = freq, zerophase = True)
-        acc_euler_rc_m_lp = acc_euler_rc_m.copy().filter(filter_type, freq = freq, zerophase = True)
-        acc_rot_err_rc_m_lp = acc_rot_err_rc_m.copy().filter(filter_type, freq = freq, zerophase = True)
-        acc_euler_err_rc_m_lp = acc_euler_err_rc_m.copy().filter(filter_type, freq = freq, zerophase = True)
+        obs_acc_lp = obs_acc_.copy().filter(filter_type, freq = freq, zerophase = False)
+        acc_obs_demean_lp = acc_obs_demean.copy().filter(filter_type, freq = freq, zerophase = False)
+        acc_obs_rc_m_lp = acc_obs_rc_m.copy().filter(filter_type, freq = freq, zerophase = False)
+        acc_euler_rc_m_lp = acc_euler_rc_m.copy().filter(filter_type, freq = freq, zerophase = False)
+        acc_rot_err_rc_m_lp = acc_rot_err_rc_m.copy().filter(filter_type, freq = freq, zerophase = False)
+        acc_euler_err_rc_m_lp = acc_euler_err_rc_m.copy().filter(filter_type, freq = freq, zerophase = False)
 
         #### 2.3 Timeseries difference ####
         time = obs_acc_[0].times()
