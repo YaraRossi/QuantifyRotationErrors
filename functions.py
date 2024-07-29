@@ -2419,12 +2419,13 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
 
         if plot:
             #### 2.4 Plot stuff ####
+            fontsize = 8
 
             ######################## Plot Time Series
             fig, axs = plt.subplots(9, 1, figsize=(11, 12), sharex=True)
             plt.subplots_adjust(hspace=0, top=0.95, bottom=0.07)
             plt.suptitle('TimeSeries Comparisons for an M' + str(magnitude))
-            x_ticks = ['obs. ', 'obs. \ndemeaned', 'rot', 'euler', 'rot + earth rc', 'euler + earth rc']
+            x_ticks = ['obs. ', 'obs. \ndemeaned', 'rot', 'euler', 'rot + spin rc', 'euler + spin rc']
 
             # rotation
             color = ['darkred', 'red', 'tomato', 'lightcoral']
@@ -2435,9 +2436,9 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
                 ax.set_ylabel('%s [rad]' % direction[i])
                 for j in range(4):
                     ax.plot(time, TS_rot[j][i], linestyle=liner[j], color=color[j], label=x_ticks[2 + j])
-            ax.legend(loc='upper left')
+            ax.legend(loc='upper left', fontsize=fontsize)
 
-            x_ticks = ['obs.', 'obs. demeaned', 'rc. rot', 'rc. euler', 'rc. rot + earth rc', 'rc. euler + earth rc']
+            x_ticks = ['obs.', 'obs. demeaned', 'rc. rot', 'rc. euler', 'rc. rot + spin rc', 'rc. euler + spin rc']
             liner = ['-', (0, (3, 1, 1, 1, 1, 1)), '--', '-.', 'dotted', '-']
             direction = ['East', 'North', 'Up']
             # displacement
@@ -2447,7 +2448,7 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
                 ax.set_ylabel('%s [m]' % direction[i])
                 for j in range(6):
                     ax.plot(time, TS_disp[j][i], linestyle=liner[j], color=color[j], label=x_ticks[j])
-            ax.legend(loc='upper left')
+            ax.legend(loc='upper left', fontsize=fontsize)
 
             # acceleration
             color = ['midnightblue', 'midnightblue', 'blue', 'cornflowerblue', 'deepskyblue', 'lightblue']
@@ -2456,7 +2457,7 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
                 ax.set_ylabel('%s [m/s/s]' % direction[i])
                 for j in range(6):
                     ax.plot(time, TS_acc[j][i], linestyle=liner[j], color=color[j], label=x_ticks[j])
-            ax.legend(loc='upper left')
+            ax.legend(loc='upper left', fontsize=fontsize)
 
             ax.set_xlabel('Time since %s [s]' % str(new_starttime))
             plt.savefig('%s/TS_%s_%s_%s.png' % (root_savefig, filter_type, ampscale, str(new_starttime)), dpi=300)
@@ -2466,7 +2467,7 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
             fig, axs = plt.subplots(9, 1, figsize=(11, 12), sharex=True)
             plt.subplots_adjust(hspace=0, top=0.95, bottom=0.07)
             plt.suptitle('TimeSeries Difference Comparisons for an M' + str(magnitude))
-            x_ticks = ['obs.', 'obs. \ndemeaned', 'rot', 'euler', 'rot + earth rc', 'euler + earth rc']
+            x_ticks = ['obs.', 'obs. \ndemeaned', 'rot', 'euler', 'rot + spin rc', 'euler + spin rc']
 
             # rotation
             color = ['darkred', 'red', 'tomato', 'lightcoral']
@@ -2474,34 +2475,34 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
             direction = ['East', 'North', 'Up']
             for i in range(3):
                 ax = axs[0 + i]
-                ax.set_ylabel('%s [rad]\nDifference \nto observed' % direction[i])
+                ax.set_ylabel('%s [rad]' % direction[i])
                 for j in range(4):
                     ax.plot(time, TSdiff_rot[j][i], linestyle=liner[j], color=color[j], label=x_ticks[2 + j])
                     #ax.axhline(TSmax_rot[j][i], linestyle=(0, (5, 10)), color=color[j])
-            ax.legend(loc='upper left')
+            ax.legend(loc='upper left', fontsize=fontsize)
 
-            x_ticks = ['obs.', 'obs. demeaned', 'rc. observed', 'rc. euler', 'rc. rot + earth rc', 'rc. euler + earth rc']
+            x_ticks = ['obs.', 'obs. demeaned', 'rc. observed', 'rc. euler', 'rc. rot + spin rc', 'rc. euler + spin rc']
             liner = ['-', (0, (3, 1, 1, 1, 1, 1)), '--', '-.', 'dotted', '-']
             direction = ['East', 'North', 'Up']
             # displacement
             color = ['k', 'k', 'dimgrey', 'grey', 'darkgrey', 'lightgrey']
             for i in range(3):
                 ax = axs[3 + i]
-                ax.set_ylabel('%s [m]\nDifference \nto observed' % direction[i])
+                ax.set_ylabel('%s [m]' % direction[i])
                 for j in range(6):
                     ax.plot(time, TSdiff_disp[j][i], linestyle=liner[j], color=color[j], label=x_ticks[j])
                     #ax.axhline(TSmax_disp[j][i], linestyle=(0, (5, 10)), color=color[j])
-            ax.legend(loc='upper left')
+            ax.legend(loc='upper left', fontsize=fontsize)
 
             # acceleration
             color = ['midnightblue', 'midnightblue', 'blue', 'cornflowerblue', 'deepskyblue', 'lightblue']
             for i in range(3):
                 ax = axs[6 + i]
-                ax.set_ylabel('%s [m/s/s]\nDifference \nto observed' % direction[i])
+                ax.set_ylabel('%s [m/s/s]' % direction[i])
                 for j in range(6):
                     ax.plot(time, TSdiff_acc[j][i], linestyle=liner[j], color=color[j], label=x_ticks[j])
                     #ax.axhline(TSmax_acc[j][i], linestyle=(0, (5, 10)), color=color[j])
-            ax.legend(loc='upper left')
+            ax.legend(loc='upper left', fontsize=fontsize)
 
             ax.set_xlabel('Time since %s [s]' % str(new_starttime))
             plt.savefig('%s/TSdiff_%s_%s_%s.png' % (root_savefig, filter_type, ampscale, str(new_starttime)), dpi=300)
