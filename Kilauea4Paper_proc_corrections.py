@@ -98,7 +98,7 @@ for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, en
     #both_maxi = filter_plotly_maxy_Kilauea(date_name, starttime, endtime, folder=mag_int, ampscale=1, magnitude=magnitude,
     #                           lpfreq=0.1, hpfreq=0.1, plot=False, show=False)
     both_maxi, both_ts = filter_plotly_maxy_Kilauea_v2(date_name, starttime, endtime, folder=mag_int, ampscale=1, magnitude=magnitude,
-                               lpfreq=0.1, hpfreq=0.1, plot=False, show=False)
+                               lpfreq=0.1, hpfreq=0.1, plot=True, show=False)
 
     # now save all the information from the EQ that have both data, and have been made into figures:
     #
@@ -125,10 +125,10 @@ for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, en
 # Now plot the error over max displacement etc.
 color = ['red', 'k', 'grey']
 marker = ['d','*','.']
-labels = ['euler', 'rot + spin', 'euler + spin']
+labels = ['euler', 'rot + spin rc', 'euler + spin rc']
 # euler_a_all_lp, rot_a_err_all_lp, euler_a_err_all_lp
 # Rotation
-fig, axs = plt.subplots(3,2, figsize=(11,5), sharex=True)
+fig, axs = plt.subplots(3,2, figsize=(11,5), sharex='col')
 plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
 for neq in range(len(max_rot_hp)):
     absolut_hp = numpy.asarray(max_rot_hp[neq][0])
@@ -139,6 +139,7 @@ for neq in range(len(max_rot_hp)):
         for i in range(3):
             axs[i,0].scatter(abs(absolut_hp[i]), abs(maximum_error_hp)[i]/abs(absolut_hp[i])*100, color=color[j-1], marker=marker[j-1])
             axs[i,1].scatter(abs(absolut_lp[i]), abs(maximum_error_lp)[i]/abs(absolut_lp[i])*100, color=color[j-1], marker=marker[j-1])
+
 axs[0, 0].set_title('highpass 0.1 Hz')
 axs[0, 1].set_title('lowpass 0.1 Hz')
 axs[0, 0].set_ylabel('East error [%]')
@@ -155,15 +156,15 @@ if minmag <4:
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
 fig.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
 
-#fig.savefig('%s/Angle_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
+fig.savefig('%s/Angle_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
 
 
 # Comparing to no rotation correction for displacement.
 #disp_obs_demean_lp, disp_obs_rc_lp, disp_euler_rc_lp, disp_rot_err_rc_lp, disp_euler_err_rc_lp
 color = ['midnightblue','cornflowerblue','red', 'k', 'grey']
 marker = ['X','D','d','*','.']
-labels = ['demean', 'rot', 'euler', 'rot + spin', 'euler + spin']
-fig, axs = plt.subplots(3,2, figsize=(11,5), sharex=True)
+labels = ['demean', 'rot', 'euler', 'rot + spin rc', 'euler + spin rc']
+fig, axs = plt.subplots(3,2, figsize=(11,5), sharex='col')
 plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
 for neq in range(len(max_disp_hp)):
     absolut_hp = numpy.asarray(max_disp_hp[neq][0])
@@ -190,7 +191,7 @@ if minmag <4:
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
 fig.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
 
-#fig.savefig('%s/Disp_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
+fig.savefig('%s/Disp_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
 '''
 # Comparing to simple rotation correction for displacement.
 #disp_obs_demean_lp, disp_obs_rc_lp, disp_euler_rc_lp, disp_rot_err_rc_lp, disp_euler_err_rc_lp
@@ -226,8 +227,8 @@ fig.savefig('%s/Disp2_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbo
 # acc_obs_demean_lp, acc_obs_rc_m_lp, acc_euler_rc_m_lp, acc_rot_err_rc_m_lp, acc_euler_err_rc_m_lp
 color = ['midnightblue','cornflowerblue','red', 'k', 'grey']
 marker = ['X','D','d','*','.']
-labels = ['demean', 'rot', 'euler', 'rot + spin', 'euler + spin']
-fig, axs = plt.subplots(3,2, figsize=(11,5), sharex=True)
+labels = ['demean', 'rot', 'euler', 'rot + spin rc', 'euler + spin rc']
+fig, axs = plt.subplots(3,2, figsize=(11,5), sharex='col')
 plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
 for neq in range(len(max_acc_hp)):
     absolut_hp = numpy.asarray(max_acc_hp[neq][0])
@@ -238,6 +239,7 @@ for neq in range(len(max_acc_hp)):
         for i in range(3):
             axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp)[i]/ abs(absolut_hp[i]) * 100,color=color[j - 1], marker=marker[j - 1])
             axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp)[i]/ abs(absolut_lp[i]) * 100,color=color[j - 1], marker=marker[j - 1])
+
 axs[0, 0].set_title('highpass 0.1 Hz')
 axs[0, 1].set_title('lowpass 0.1 Hz')
 axs[0, 0].set_ylabel('East error [%]')
@@ -253,68 +255,7 @@ if minmag <4:
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
 fig.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
 
-#fig.savefig('%s/Acc_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
+fig.savefig('%s/Acc_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
 
-##############################################################################
-########################## Now as time series. ##########################
-# acc_obs_demean_lp, acc_obs_rc_m_lp, acc_euler_rc_m_lp, acc_rot_err_rc_m_lp, acc_euler_err_rc_m_lp
-color = ['midnightblue','cornflowerblue','red', 'k', 'grey']
-marker = ['X','D','d','*','.']
-linestyle=['-','--','-.','dotted',(10, (3, 1, 1, 1, 1, 1))]
-labels = ['demean', 'rot', 'euler', 'rot + spin', 'euler + spin']
-fig, axs = plt.subplots(3,2, figsize=(11,5), sharex=True)
-plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
-for neq in range(len(ts_acc_hp)):
-    for j in range(1,len(ts_acc_hp[neq])):
-        maximum_error_hp = numpy.asarray(ts_acc_hp[neq][j])
-        maximum_error_lp = numpy.asarray(ts_acc_lp[neq][j])
-        for i in range(3):
-            axs[i, 0].plot(ts_acc_hp[neq][j][i],color=color[j - 1], linestyle=linestyle[j - 1])
-            axs[i, 1].plot(ts_acc_lp[neq][j][i],color=color[j - 1], linestyle=linestyle[j - 1])
-axs[0, 0].set_title('highpass 0.1 Hz')
-axs[0, 1].set_title('lowpass 0.1 Hz')
-axs[0, 0].set_ylabel('East [m/s/s]')
-axs[1, 0].set_ylabel('North [m/s/s]')
-axs[2, 0].set_ylabel('Up [m/s/s]')
-axs[2, 0].set_xlabel('Time [sample]')
-axs[2, 1].set_xlabel('Time [sample]')
-if minmag <4:
-    for j in range(2):
-        for i in range(3):
-            axs[i, j].set_yscale('log')
-            axs[i, j].set_xscale('log')
-custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
-fig.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
 
-#fig.savefig('%s/Acc_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
-
-color = ['midnightblue','cornflowerblue','red', 'k', 'grey']
-marker = ['X','D','d','*','.']
-linestyle=['-','--','-.','dotted',(10, (3, 1, 1, 1, 1, 1))]
-labels = ['demean', 'rot', 'euler', 'rot + spin', 'euler + spin']
-fig, axs = plt.subplots(3,2, figsize=(11,5), sharex=True)
-plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
-for neq in range(len(ts_disp_hp)):
-    for j in range(1,len(ts_disp_hp[neq])):
-        maximum_error_hp = numpy.asarray(ts_disp_hp[neq][j])
-        maximum_error_lp = numpy.asarray(ts_disp_lp[neq][j])
-        for i in range(3):
-            axs[i, 0].plot(ts_disp_hp[neq][j][i],color=color[j - 1], linestyle=linestyle[j - 1])
-            axs[i, 1].plot(ts_disp_lp[neq][j][i],color=color[j - 1], linestyle=linestyle[j - 1])
-axs[0, 0].set_title('highpass 0.1 Hz')
-axs[0, 1].set_title('lowpass 0.1 Hz')
-axs[0, 0].set_ylabel('East [m]')
-axs[1, 0].set_ylabel('North [m]')
-axs[2, 0].set_ylabel('Up [m]')
-axs[2, 0].set_xlabel('Time [sample]')
-axs[2, 1].set_xlabel('Time [sample]')
-if minmag <4:
-    for j in range(2):
-        for i in range(3):
-            axs[i, j].set_yscale('log')
-            axs[i, j].set_xscale('log')
-custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
-fig.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
-
-#fig.savefig('%s/Disp_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
 plt.show()
