@@ -19,10 +19,10 @@ freq = 0.1
 ss = 20
 fig1, axs1 = plt.subplots(3,2, figsize=(11,5))#, sharex=True, sharey=True)
 plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
-plt.suptitle('Rotation Angle')
+#plt.suptitle('Rotation Angle')
 fig2, axs2 = plt.subplots(3,2, figsize=(11,5))#, sharex=True, sharey=True)
 plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
-plt.suptitle('Rotation Rate')
+#plt.suptitle('Rotation Rate')
 
 for latitude in [0,15,20,30,45,60,75,90]:
 
@@ -94,15 +94,15 @@ for latitude in [0,15,20,30,45,60,75,90]:
         max_obs_angle_hp = max(abs(obs_angle_hp.select(channel=ch)[0].data))
         diff1 = max(abs(obs_angle_hp.select(channel=ch)[0].data - euler_angle_hp.select(channel=ch)[0].data))
         diff2 = max(abs(obs_angle_hp.select(channel=ch)[0].data - rot_angle_err_hp.select(channel=ch)[0].data))
-        ax.scatter(latitude,diff1/max_obs_angle_hp*100, s=s, marker='d', c='k')
-        ax.scatter(latitude,diff2/max_obs_angle_hp*100, s=s, marker='*', c='red')
+        ax.scatter(latitude,diff1/max_obs_angle_hp*100, s=s, marker='d', c='red')
+        ax.scatter(latitude,diff2/max_obs_angle_hp*100, s=s, marker='*', c='k')
     # lowpass
     for ch,ax in zip(['HJE','HJN','HJZ'],[axs1[0,1],axs1[1,1],axs1[2,1]]):
         max_obs_angle_lp = max(abs(obs_angle_lp.select(channel=ch)[0].data))
         diff1 = max(abs(obs_angle_lp.select(channel=ch)[0].data - euler_angle_lp.select(channel=ch)[0].data))
         diff2 = max(abs(obs_angle_lp.select(channel=ch)[0].data - rot_angle_err_lp.select(channel=ch)[0].data))
-        ax.scatter(latitude,diff1/max_obs_angle_lp*100, s=s, marker='d', c='k')
-        ax.scatter(latitude,diff2/max_obs_angle_lp*100, s=s, marker='*', c='red')
+        ax.scatter(latitude,diff1/max_obs_angle_lp*100, s=s, marker='d', c='red')
+        ax.scatter(latitude,diff2/max_obs_angle_lp*100, s=s, marker='*', c='k')
 
     ### Rotationrate
     # highpass
@@ -110,15 +110,15 @@ for latitude in [0,15,20,30,45,60,75,90]:
         max_obs_rr_hp = max(abs(obs_rr_hp.select(channel=ch)[0].data))
         diff1 = max(abs(obs_rr_hp.select(channel=ch)[0].data - euler_rr_hp.select(channel=ch)[0].data))
         diff2 = max(abs(obs_rr_hp.select(channel=ch)[0].data - rot_rr_err_hp.select(channel=ch)[0].data))
-        ax.scatter(latitude, diff1/max_obs_rr_hp*100, s=s, marker='d', c='k')
-        ax.scatter(latitude, diff2/max_obs_rr_hp*100, s=s, marker='*', c='red')
+        ax.scatter(latitude, diff1/max_obs_rr_hp*100, s=s, marker='d', c='red')
+        ax.scatter(latitude, diff2/max_obs_rr_hp*100, s=s, marker='*', c='k')
     # lowpass
     for ch, ax in zip(['HJE', 'HJN', 'HJZ'], [axs2[0, 1], axs2[1, 1], axs2[2, 1]]):
         max_obs_rr_lp = max(abs(obs_rr_lp.select(channel=ch)[0].data))
         diff1 = max(abs(obs_rr_lp.select(channel=ch)[0].data - euler_rr_lp.select(channel=ch)[0].data))
         diff2 = max(abs(obs_rr_lp.select(channel=ch)[0].data - rot_rr_err_lp.select(channel=ch)[0].data))
-        ax.scatter(latitude, diff1/max_obs_rr_lp*100, s=s, marker='d', c='k')
-        ax.scatter(latitude, diff2/max_obs_rr_lp*100, s=s, marker='*', c='red')
+        ax.scatter(latitude, diff1/max_obs_rr_lp*100, s=s, marker='d', c='red')
+        ax.scatter(latitude, diff2/max_obs_rr_lp*100, s=s, marker='*', c='k')
 
 
 for ax in [axs1,axs2]:
@@ -137,6 +137,13 @@ for ax in [axs1,axs2]:
     ax[0, 0].set_ylabel('East Error [%]')
     ax[1, 0].set_ylabel('North Error [%]')
     ax[2, 0].set_ylabel('Z Error [%]')
+
+color = ['red', 'k']
+marker = ['d', '*']
+labels = ['euler', 'rot + spin rc']
+custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
+fig2.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
+fig1.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
 
 fig1.savefig('%s/Kilauea_%s_LatitudeFiltering_a.png' %(root_savefig,date), dpi=300)
 fig2.savefig('%s/Kilauea_%s_LatitudeFiltering_rr.png' %(root_savefig,date), dpi=300)

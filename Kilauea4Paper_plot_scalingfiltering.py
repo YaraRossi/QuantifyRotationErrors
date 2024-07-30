@@ -21,15 +21,15 @@ ss = 20
 withother = True # at True, the other EQ's will be plotted.
 fig1, axs1 = plt.subplots(3,2, figsize=(11,5))#, sharex=True, sharey=True)
 plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
-plt.suptitle('Rotation Angle')
+#plt.suptitle('Rotation Angle')
 fig2, axs2 = plt.subplots(3,2, figsize=(11,5))#, sharex=True, sharey=True)
 plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
-plt.suptitle('Rotation Rate')
+#plt.suptitle('Rotation Rate')
 
 for ampscale in [0.001,0.01,0.1,1,10,100,1000]:
     date = '2018_07_12T05_12_15_000000Z'
-    color1 = 'red'
-    color2 = 'k'
+    color1 = 'k'
+    color2 = 'red'
     if withother:
         if ampscale == 1:
             '''for date, color1, color2 in zip(['2018_07_13T00_41_57_610339Z','2018_07_13T00_41_30_000000Z',
@@ -41,8 +41,8 @@ for ampscale in [0.001,0.01,0.1,1,10,100,1000]:
             for file in os.listdir(root_alleqbig):
                 if '_1_lat19.420908_obs_angle_HJE' in file:
                     date = file[8:35]
-                    color1 = 'indianred'
-                    color2 = 'grey'
+                    color1 = 'grey'
+                    color2 = 'indianred'
                     # Load Data
                     obs_angle = read('%s/Kilauea_%s_%s_lat19.420908_obs_angle_HJE.mseed' % (root_alleq, date, ampscale))
                     obs_angle += read('%s/Kilauea_%s_%s_lat19.420908_obs_angle_HJN.mseed' % (root_alleq, date, ampscale))
@@ -260,6 +260,13 @@ for ax, unit in zip([axs1,axs2],['[rad]','[rad/s]']):
     ax[0, 0].set_ylabel('East Error [%]')
     ax[1, 0].set_ylabel('North Error [%]')
     ax[2, 0].set_ylabel('Z Error [%]')
+
+color = ['red', 'k']
+marker = ['d', '*']
+labels = ['euler', 'rot + spin rc']
+custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
+fig2.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
+fig1.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
 
 if withother:
     fig1.savefig('%s/Kilauea_%s_ScalingFiltering_a_add.png' % (root_savefig, date), dpi=300)
