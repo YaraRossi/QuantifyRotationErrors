@@ -140,8 +140,8 @@ for neq in range(len(max_rot_hp)):
             axs[i,0].scatter(abs(absolut_hp[i]), abs(maximum_error_hp)[i]/abs(absolut_hp[i])*100, color=color[j-1], marker=marker[j-1])
             axs[i,1].scatter(abs(absolut_lp[i]), abs(maximum_error_lp)[i]/abs(absolut_lp[i])*100, color=color[j-1], marker=marker[j-1])
 
-axs[0, 0].set_title('highpass 0.1 Hz')
-axs[0, 1].set_title('lowpass 0.1 Hz')
+axs[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
+axs[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
 axs[0, 0].set_ylabel('East error [%]')
 axs[1, 0].set_ylabel('North error [%]')
 axs[2, 0].set_ylabel('Up error [%]')
@@ -154,7 +154,7 @@ if minmag <4:
             axs[i, j].set_xscale('log')
 
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
-fig.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
+fig.legend(handles=custom_lines, loc='upper right', ncol=len(labels))
 
 fig.savefig('%s/Angle_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
 
@@ -176,8 +176,8 @@ for neq in range(len(max_disp_hp)):
             axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp)[i]/abs(absolut_hp[i]) * 100,color=color[j - 1], marker=marker[j - 1])
             axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp)[i]/abs(absolut_lp[i]) * 100,color=color[j - 1], marker=marker[j - 1])
 
-axs[0, 0].set_title('highpass 0.1 Hz')
-axs[0, 1].set_title('lowpass 0.1 Hz')
+axs[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
+axs[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
 axs[0, 0].set_ylabel('East error [%]')
 axs[1, 0].set_ylabel('North error [%]')
 axs[2, 0].set_ylabel('Up error [%]')
@@ -189,7 +189,7 @@ if minmag <4:
             axs[i, j].set_yscale('log')
             axs[i, j].set_xscale('log')
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
-fig.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
+fig.legend(handles=custom_lines, loc='upper right', ncol=len(labels))
 
 fig.savefig('%s/Disp_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
 '''
@@ -240,8 +240,8 @@ for neq in range(len(max_acc_hp)):
             axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp)[i]/ abs(absolut_hp[i]) * 100,color=color[j - 1], marker=marker[j - 1])
             axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp)[i]/ abs(absolut_lp[i]) * 100,color=color[j - 1], marker=marker[j - 1])
 
-axs[0, 0].set_title('highpass 0.1 Hz')
-axs[0, 1].set_title('lowpass 0.1 Hz')
+axs[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
+axs[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
 axs[0, 0].set_ylabel('East error [%]')
 axs[1, 0].set_ylabel('North error [%]')
 axs[2, 0].set_ylabel('Up error [%]')
@@ -253,7 +253,7 @@ if minmag <4:
             axs[i, j].set_yscale('log')
             axs[i, j].set_xscale('log')
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
-fig.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
+fig.legend(handles=custom_lines, loc='upper right', ncol=len(labels))
 
 fig.savefig('%s/Acc_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbox_inches='tight')
 
