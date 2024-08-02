@@ -128,8 +128,8 @@ for ax in [axs1,axs2]:
             #ax[i, j].axvline(x=19.420908, c='grey',linestyle='--')
             #ax[i, j].set_xscale('log')
 
-    ax[0, 0].set_title('highpass 0.1 Hz')
-    ax[0, 1].set_title('lowpass 0.1 Hz')
+    ax[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
+    ax[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
 
     ax[2, 0].set_xlabel('latitude [°]')
     ax[2, 1].set_xlabel('latitude [°]')
@@ -142,8 +142,8 @@ color = ['red', 'k']
 marker = ['d', '*']
 labels = ['euler', 'rot + spin rc']
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
-fig2.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
-fig1.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
+fig2.legend(handles=custom_lines, loc='upper right', ncol=len(labels))
+fig1.legend(handles=custom_lines, loc='upper right', ncol=len(labels))
 
 fig1.savefig('%s/Kilauea_%s_LatitudeFiltering_a.png' %(root_savefig,date), dpi=300)
 fig2.savefig('%s/Kilauea_%s_LatitudeFiltering_rr.png' %(root_savefig,date), dpi=300)

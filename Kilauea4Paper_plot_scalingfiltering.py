@@ -18,7 +18,7 @@ date = '2018_07_12T05_12_15_000000Z' #'2018_07_13T00_41_57_610339Z' #'2018_07_13
 
 freq = 0.1
 ss = 20
-withother = True # at True, the other EQ's will be plotted.
+withother = False # at True, the other EQ's will be plotted.
 fig1, axs1 = plt.subplots(3,2, figsize=(11,5))#, sharex=True, sharey=True)
 plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
 #plt.suptitle('Rotation Angle')
@@ -251,8 +251,8 @@ for ax, unit in zip([axs1,axs2],['[rad]','[rad/s]']):
             ax[i, j].set_yscale('log')
             ax[i, j].set_xscale('log')
 
-    ax[0, 0].set_title('highpass 0.1 Hz')
-    ax[0, 1].set_title('lowpass 0.1 Hz')
+    ax[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
+    ax[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
 
     ax[2, 0].set_xlabel('$\sqrt{E^2+N^2+Z^2}$ %s' % unit)
     ax[2, 1].set_xlabel('$\sqrt{E^2+N^2+Z^2}$ %s' % unit)
@@ -265,8 +265,8 @@ color = ['red', 'k']
 marker = ['d', '*']
 labels = ['euler', 'rot + spin rc']
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
-fig2.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
-fig1.legend(handles=custom_lines, loc='upper center', ncol=len(labels))
+fig2.legend(handles=custom_lines, loc='upper right', ncol=len(labels))
+fig1.legend(handles=custom_lines, loc='upper right', ncol=len(labels))
 
 if withother:
     fig1.savefig('%s/Kilauea_%s_ScalingFiltering_a_add.png' % (root_savefig, date), dpi=300)
