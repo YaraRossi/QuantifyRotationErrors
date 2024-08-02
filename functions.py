@@ -2259,6 +2259,7 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
         euler_a_all_lp = euler_a_all.copy().filter(filter_type, freq = freq, zerophase = False)
         rot_a_err_all_lp = rot_a_err_all.copy().filter(filter_type, freq = freq, zerophase = False)
         euler_a_err_all_lp = euler_a_err_all.copy().filter(filter_type, freq = freq, zerophase = False)
+
         # Disp [disp_obs_lp, disp_obs_demean_lp, disp_obs_rc_lp, disp_euler_rc_lp, disp_euler_err_rc_lp]
         disp_obs_lp = disp_obs.copy().filter(filter_type, freq = freq, zerophase = False)
         disp_obs_demean_lp = disp_obs_demean.copy().filter(filter_type, freq = freq, zerophase = False)
@@ -2276,12 +2277,13 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
         acc_euler_err_rc_m_lp = acc_euler_err_rc_m.copy().filter(filter_type, freq = freq, zerophase = False)
 
         #### 2.3 Timeseries difference ####
-        time = obs_acc_[0].times()
 
         # rotation
         base = obs_a_all_lp
         data = [obs_a_all_lp, euler_a_all_lp, rot_a_err_all_lp, euler_a_err_all_lp]
         NN = len(data)
+        start, end = int(df), int((2*df))
+        time = obs_acc_[0].times()[start:-end]
         ch = ['HJE','HJN','HJZ']
         TSdiff_rot = [[[], [], []],
                       [[], [], []],
@@ -2298,12 +2300,12 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
         for j in range(NN):
             channel = data[j]
             for i in range(3):
-                diff = channel.select(channel=ch[i])[0].data - base.select(channel=ch[i])[0].data
+                diff = channel.select(channel=ch[i])[0].data[start:-end] - base.select(channel=ch[i])[0].data[start:-end]
                 TSdiff_rot[j][i] = diff
 
                 # find extreme value:
-                mini = numpy.min(diff[:-df])
-                maxi = numpy.max(diff[:-df])
+                mini = numpy.min(diff)
+                maxi = numpy.max(diff)
                 if numpy.abs(mini) > maxi:
                     TSmax_rot[j][i] = mini
                 else:
@@ -2311,14 +2313,14 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
 
                 # have the first one be the amplitude of motion and not the difference which is just 0.
                 if j == 0:
-                    mini = numpy.min(channel.select(channel=ch[i])[0].data)
-                    maxi = numpy.max(channel.select(channel=ch[i])[0].data)
+                    mini = numpy.min(channel.select(channel=ch[i])[0].data[start:-end])
+                    maxi = numpy.max(channel.select(channel=ch[i])[0].data[start:-end])
                     if numpy.abs(mini) > maxi:
                         TSmax_rot[j][i] = mini
                     else:
                         TSmax_rot[j][i] = maxi
 
-                TS_rot[j][i] = channel.select(channel=ch[i])[0].data
+                TS_rot[j][i] = channel.select(channel=ch[i])[0].data[start:-end]
 
         # acceleration
         base = obs_acc_lp
@@ -2346,12 +2348,12 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
         for j in range(NN):
             channel = data[j]
             for i in range(3):
-                diff = channel.select(channel=ch[i])[0].data - base.select(channel=ch[i])[0].data
+                diff = channel.select(channel=ch[i])[0].data[start:-end] - base.select(channel=ch[i])[0].data[start:-end]
                 TSdiff_acc[j][i] = diff
 
                 # find extreme value:
-                mini = numpy.min(diff[:-df])
-                maxi = numpy.max(diff[:-df])
+                mini = numpy.min(diff)
+                maxi = numpy.max(diff)
                 if numpy.abs(mini) > maxi:
                     TSmax_acc[j][i] = mini
                 else:
@@ -2359,13 +2361,13 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
 
                 # have the first one be the amplitude of motion and not the difference which is just 0.
                 if j == 0:
-                    mini = numpy.min(channel.select(channel=ch[i])[0].data)
-                    maxi = numpy.max(channel.select(channel=ch[i])[0].data)
+                    mini = numpy.min(channel.select(channel=ch[i])[0].data[start:-end])
+                    maxi = numpy.max(channel.select(channel=ch[i])[0].data[start:-end])
                     if numpy.abs(mini) > maxi:
                         TSmax_acc[j][i] = mini
                     else:
                         TSmax_acc[j][i] = maxi
-                TS_acc[j][i] = channel.select(channel=ch[i])[0].data
+                TS_acc[j][i] = channel.select(channel=ch[i])[0].data[start:-end]
 
         # displacement
         base = disp_obs_lp
@@ -2393,12 +2395,12 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
         for j in range(NN):
             channel = data[j]
             for i in range(3):
-                diff = channel.select(channel=ch[i])[0].data - base.select(channel=ch[i])[0].data
+                diff = channel.select(channel=ch[i])[0].data[start:-end] - base.select(channel=ch[i])[0].data[start:-end]
                 TSdiff_disp[j][i] = diff
 
                 # find extreme value:
-                mini = numpy.min(diff[:-df])
-                maxi = numpy.max(diff[:-df])
+                mini = numpy.min(diff)
+                maxi = numpy.max(diff)
                 if numpy.abs(mini) > maxi:
                     TSmax_disp[j][i] = mini
                 else:
@@ -2406,14 +2408,14 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
 
                 # have the first one be the amplitude of motion and not the difference which is just 0.
                 if j == 0:
-                    mini = numpy.min(channel.select(channel=ch[i])[0].data)
-                    maxi = numpy.max(channel.select(channel=ch[i])[0].data)
+                    mini = numpy.min(channel.select(channel=ch[i])[0].data[start:-end])
+                    maxi = numpy.max(channel.select(channel=ch[i])[0].data[start:-end])
                     if numpy.abs(mini) > maxi:
                         TSmax_disp[j][i] = mini
                     else:
                         TSmax_disp[j][i] = maxi
 
-                TS_disp[j][i] = channel.select(channel=ch[i])[0].data
+                TS_disp[j][i] = channel.select(channel=ch[i])[0].data[start:-end]
 
 
 
@@ -2460,6 +2462,7 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
             ax.legend(loc='upper left', fontsize=fontsize)
 
             ax.set_xlabel('Time since %s [s]' % str(new_starttime))
+            ax.set_xlim(left=0, right=44)
             plt.savefig('%s/TS_%s_%s_%s.png' % (root_savefig, filter_type, ampscale, str(new_starttime)), dpi=300)
 
             ######################## Plot Difference
@@ -2505,6 +2508,7 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
             ax.legend(loc='upper left', fontsize=fontsize)
 
             ax.set_xlabel('Time since %s [s]' % str(new_starttime))
+            ax.set_xlim(left=0, right=44)
             plt.savefig('%s/TSdiff_%s_%s_%s.png' % (root_savefig, filter_type, ampscale, str(new_starttime)), dpi=300)
             if show:
                 plt.show()
