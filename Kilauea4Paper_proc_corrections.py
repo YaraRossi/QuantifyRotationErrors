@@ -38,7 +38,7 @@ def eq_kilauea(min_mag=3):
 
 ## 2. Other earthquakes
 # get time of various EQ's:
-minmag = 4
+minmag = 3
 
 info_eq = eq_kilauea(min_mag=minmag)
 ampscale=1
@@ -87,7 +87,25 @@ ts_acc_hp = []
 for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, endtime, magnitude, distance):
     try:
         makeAnglesKilauea_lat_v3(date_name,starttime,endtime,latitude=19.420908, ampscale=1,
-                                 plot=False, savedate=False, folder='All_EQ')
+                                 plot=False, savedate=True, folder='All_EQ')
+        if magnitude > 4:
+            for ampscale in [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]:
+                makeAnglesKilauea_lat_v3(date_name, starttime, endtime, latitude=19.420908, ampscale=ampscale,
+                                         plot=False, savedate=True, folder='Scaling')
+
+            for latitude in [0, 15, 20, 30, 45, 60, 75, 90]:
+                makeAnglesKilauea_lat_v3(date_name, starttime, endtime, latitude=latitude, ampscale=1, plot=False,
+                                         savedate=True, folder='Latitudes')
+        elif '2018-07-12T05:12' in str(starttime):
+
+            for ampscale in [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]:
+                makeAnglesKilauea_lat_v3(date_name, starttime, endtime, latitude=19.420908, ampscale=ampscale,
+                                         plot=False, savedate=True, folder='Scaling')
+
+            for latitude in [0, 15, 20, 30, 45, 60, 75, 90]:
+                makeAnglesKilauea_lat_v3(date_name, starttime, endtime, latitude=latitude, ampscale=1, plot=False,
+                                         savedate=True, folder='Latitudes')
+
     except:
         print('no data for times: ' + date_name)
         continue
