@@ -18,7 +18,7 @@ date = '2018_07_12T05_12_15_000000Z' #'2018_07_13T00_41_57_610339Z' #'2018_07_13
 
 freq = 0.1
 ss = 20
-withother = True # at True, the other EQ's will be plotted.
+withother = False # at True, the other EQ's will be plotted.
 fig1, axs1 = plt.subplots(3,2, figsize=(11,5))#, sharex=True, sharey=True)
 plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
 #plt.suptitle('Rotation Angle')

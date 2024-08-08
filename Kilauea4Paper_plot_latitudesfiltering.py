@@ -14,7 +14,7 @@ root_save = '%s/Latitudes' % root_processeddata
 
 NAME = ['obs_angle' ,'obs_rr', 'euler_angle' ,'euler_angle_err', 'euler_rr', 'euler_rr_err']
 
-date = '2018_07_12T05_12_15_000000Z'#'2018_07_13T00_41_57_000000Z' #'2018_07_12T05_12_15_000000Z'
+date = '2018_07_12T05_12_26_921263Z'#'2018_07_13T00_41_57_000000Z' #'2018_07_12T05_12_15_000000Z'
 freq = 0.1
 ss = 20
 fig1, axs1 = plt.subplots(3,2, figsize=(11,5))#, sharex=True, sharey=True)

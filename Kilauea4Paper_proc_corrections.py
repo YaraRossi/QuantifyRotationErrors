@@ -38,9 +38,11 @@ def eq_kilauea(min_mag=3):
 
 ## 2. Other earthquakes
 # get time of various EQ's:
-minmag = 3
+minmag = 4
+ml318 = True
 
 info_eq = eq_kilauea(min_mag=minmag)
+info_eq3 = eq_kilauea(min_mag=3.17)
 ampscale=1
 
 # get start and end times of Earthquakes:
@@ -48,6 +50,22 @@ date, arrival, starttime, endtime, magnitude, distance = [], [], [], [], [], []
 
 for date_time,arrival_time, mags, dist in zip(info_eq['time'],info_eq['arrivaltime'],info_eq['mag'],info_eq['dist']):
 
+    date_correct = date_time[0:4]+date_time[5:7]+date_time[8:10]
+    date.append(date_correct)
+    arrival.append(arrival_time)
+    if mags < 4:
+        starttime.append(UTCDateTime(date_time)+arrival_time-15)
+        endtime.append(UTCDateTime(date_time)+arrival_time+30)
+    else:
+        starttime.append(UTCDateTime(date_time)+arrival_time-15)
+        endtime.append(UTCDateTime(date_time)+arrival_time+30)
+    magnitude.append(mags)
+    distance.append(dist)
+
+if ml318:
+    iindex = info_eq3.index[info_eq3['time'].astype(str).str.contains('2018-07-12T05:12')].tolist()
+    info_eq_ = info_eq3.loc[iindex[0]]
+    date_time, arrival_time, mags, dist = info_eq_['time'], info_eq_['arrivaltime'], info_eq_['mag'], info_eq_['dist']
     date_correct = date_time[0:4]+date_time[5:7]+date_time[8:10]
     date.append(date_correct)
     arrival.append(arrival_time)
@@ -85,7 +103,7 @@ ts_disp_hp = []
 ts_acc_lp = []
 ts_acc_hp = []
 for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, endtime, magnitude, distance):
-    try:
+    '''try:
         makeAnglesKilauea_lat_v3(date_name,starttime,endtime,latitude=19.420908, ampscale=1,
                                  plot=False, savedate=True, folder='All_EQ')
         if magnitude > 4:
@@ -108,37 +126,42 @@ for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, en
 
     except:
         print('no data for times: ' + date_name)
-        continue
+        continue'''
+
     print('Now perform the corrections on the accelerations')
-    #correctAccelerationKilauea_v2(date_name, starttime, endtime, ampscale=1,
-    #                              plot=True, savedate=False, folder='All_EQ')
-    mag_int = int(magnitude)
-    #both_maxi = filter_plotly_maxy_Kilauea(date_name, starttime, endtime, folder=mag_int, ampscale=1, magnitude=magnitude,
-    #                           lpfreq=0.1, hpfreq=0.1, plot=False, show=False)
-    both_maxi, both_ts = filter_plotly_maxy_Kilauea_v2(date_name, starttime, endtime, folder=mag_int, ampscale=1, magnitude=magnitude,
-                               lpfreq=0.1, hpfreq=0.1, plot=True, show=False)
+    try:
+        #correctAccelerationKilauea_v2(date_name, starttime, endtime, ampscale=1,
+        #                              plot=True, savedate=False, folder='All_EQ')
+        mag_int = int(magnitude)
+        #both_maxi = filter_plotly_maxy_Kilauea(date_name, starttime, endtime, folder=mag_int, ampscale=1, magnitude=magnitude,
+        #                           lpfreq=0.1, hpfreq=0.1, plot=False, show=False)
+        both_maxi, both_ts = filter_plotly_maxy_Kilauea_v2(date_name, starttime, endtime, folder=mag_int, ampscale=1, magnitude=magnitude,
+                                   lpfreq=0.1, hpfreq=0.1, plot=True, show=False)
 
-    # now save all the information from the EQ that have both data, and have been made into figures:
-    #
-    available_EQ.append([date_name, starttime, endtime, magnitude, distance])
-    max_rot_lp.append([both_maxi[0][0][0],both_maxi[0][0][1],both_maxi[0][0][2],both_maxi[0][0][3]]) # lowpass
-    max_rot_hp.append([both_maxi[1][0][0],both_maxi[1][0][1],both_maxi[1][0][2],both_maxi[1][0][3]]) # highpass
+        # now save all the information from the EQ that have both data, and have been made into figures:
+        #
+        available_EQ.append([date_name, starttime, endtime, magnitude, distance])
+        max_rot_lp.append([both_maxi[0][0][0],both_maxi[0][0][1],both_maxi[0][0][2],both_maxi[0][0][3]]) # lowpass
+        max_rot_hp.append([both_maxi[1][0][0],both_maxi[1][0][1],both_maxi[1][0][2],both_maxi[1][0][3]]) # highpass
 
-    max_disp_lp.append([both_maxi[0][1][0],both_maxi[0][1][1],both_maxi[0][1][2],both_maxi[0][1][3],both_maxi[0][1][4],both_maxi[0][1][5]]) # lowpass
-    max_disp_hp.append([both_maxi[1][1][0],both_maxi[1][1][1],both_maxi[1][1][2],both_maxi[1][1][3],both_maxi[1][1][4],both_maxi[1][1][5]]) # highpass
+        max_disp_lp.append([both_maxi[0][1][0],both_maxi[0][1][1],both_maxi[0][1][2],both_maxi[0][1][3],both_maxi[0][1][4],both_maxi[0][1][5]]) # lowpass
+        max_disp_hp.append([both_maxi[1][1][0],both_maxi[1][1][1],both_maxi[1][1][2],both_maxi[1][1][3],both_maxi[1][1][4],both_maxi[1][1][5]]) # highpass
 
-    max_acc_lp.append([both_maxi[0][2][0],both_maxi[0][2][1],both_maxi[0][2][2],both_maxi[0][2][3],both_maxi[0][2][4],both_maxi[0][2][5]]) # lowpass
-    max_acc_hp.append([both_maxi[1][2][0],both_maxi[1][2][1],both_maxi[1][2][2],both_maxi[1][2][3],both_maxi[1][2][4],both_maxi[1][2][5]]) # highpas
+        max_acc_lp.append([both_maxi[0][2][0],both_maxi[0][2][1],both_maxi[0][2][2],both_maxi[0][2][3],both_maxi[0][2][4],both_maxi[0][2][5]]) # lowpass
+        max_acc_hp.append([both_maxi[1][2][0],both_maxi[1][2][1],both_maxi[1][2][2],both_maxi[1][2][3],both_maxi[1][2][4],both_maxi[1][2][5]]) # highpas
 
-    # Timeseries
-    ts_rot_lp.append([both_ts[0][0][0], both_ts[0][0][1], both_ts[0][0][2], both_ts[0][0][3]])  # lowpass
-    ts_rot_hp.append([both_ts[1][0][0], both_ts[1][0][1], both_ts[1][0][2], both_ts[1][0][3]])  # highpass
+        # Timeseries
+        ts_rot_lp.append([both_ts[0][0][0], both_ts[0][0][1], both_ts[0][0][2], both_ts[0][0][3]])  # lowpass
+        ts_rot_hp.append([both_ts[1][0][0], both_ts[1][0][1], both_ts[1][0][2], both_ts[1][0][3]])  # highpass
 
-    ts_disp_lp.append([both_ts[0][1][0], both_ts[0][1][1], both_ts[0][1][2], both_ts[0][1][3], both_ts[0][1][4], both_ts[0][1][5]])  # lowpass
-    ts_disp_hp.append([both_ts[1][1][0], both_ts[1][1][1], both_ts[1][1][2], both_ts[1][1][3], both_ts[1][1][4], both_ts[1][1][5]])  # highpass
+        ts_disp_lp.append([both_ts[0][1][0], both_ts[0][1][1], both_ts[0][1][2], both_ts[0][1][3], both_ts[0][1][4], both_ts[0][1][5]])  # lowpass
+        ts_disp_hp.append([both_ts[1][1][0], both_ts[1][1][1], both_ts[1][1][2], both_ts[1][1][3], both_ts[1][1][4], both_ts[1][1][5]])  # highpass
 
-    ts_acc_lp.append([both_ts[0][2][0], both_ts[0][2][1], both_ts[0][2][2], both_ts[0][2][3], both_ts[0][2][4], both_ts[0][2][5]])  # lowpass
-    ts_acc_hp.append([both_ts[1][2][0], both_ts[1][2][1], both_ts[1][2][2], both_ts[1][2][3], both_ts[1][2][4], both_ts[1][2][5]])  # highpas
+        ts_acc_lp.append([both_ts[0][2][0], both_ts[0][2][1], both_ts[0][2][2], both_ts[0][2][3], both_ts[0][2][4], both_ts[0][2][5]])  # lowpass
+        ts_acc_hp.append([both_ts[1][2][0], both_ts[1][2][1], both_ts[1][2][2], both_ts[1][2][3], both_ts[1][2][4], both_ts[1][2][5]])  # highpas
+    except:
+        print('no data for times: ' + date_name)
+        continue
 
 # Now plot the error over max displacement etc.
 color = ['red', 'k', 'grey']
