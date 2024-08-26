@@ -1,37 +1,14 @@
-import pandas as pd
-from obspy.taup import TauPyModel
-from obspy.geodetics import locations2degrees
-
 # Import necessary libraries
 from obspy.clients.fdsn import Client
 from obspy.clients.fdsn.header import FDSNException
 from obspy import UTCDateTime
 from roots import get_roots
+from functions import eq_kilauea
 root_originaldata, root_savefig, root_processeddata = get_roots()
 
 # Specify the IRIS FDSN web service URL
 iris_client = Client("IRIS")
 
-def eq_kilauea(min_mag = 3):
-    root = root_originaldata
-    file_ = pd.read_csv('Kilauea_EQ_201807_3MW.txt', sep=',')
-
-    file = file_[file_.mag > min_mag]
-    for i in range(len(file['depth'])):
-        if file['depth'][i] < 0:
-            file['depth'][i] = 0
-
-    T_lat, T_lon = 19.420908, -155.292023
-    model = TauPyModel(model="iasp91")
-
-    file['dist'] = locations2degrees(T_lat, T_lon, file['latitude'], file['longitude'])  # (lat1, long1, lat2, long2)
-    arrivaltime = []
-    for index, row in file.iterrows():
-        arrivaltime.append(model.get_travel_times(source_depth_in_km=abs(row['depth']),
-                                                  distance_in_degree=row['dist'])[0].time)
-    file['arrivaltime'] = arrivaltime
-
-    return file
 
 # Define the station, network, location, and channel code
 network = "HV"
@@ -41,14 +18,14 @@ channel = "HJ1"
 
 # Define the start and end times for the data request
 
-file = eq_kilauea()
+file = eq_kilauea(min_mag=3.17)
 
 done = ['20180711']
 
 for i in range(len(file['time'])):
     arrivaltime = file['time'][i]
     start_time = UTCDateTime(arrivaltime)
-    start_time.hour, start_time.minute, start_time.second = 0,0,0
+    start_time.hour, start_time.minute, start_time.second = 0, 0, 0
     end_time = start_time + 24*60*60
     if start_time.month < 10:
         date_name = '%s0%s%s' %(start_time.year, start_time.month, start_time.day)
