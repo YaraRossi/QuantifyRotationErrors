@@ -3,6 +3,7 @@ from obspy import read, read_inventory
 import matplotlib.pyplot as plt
 import numpy
 from numpy import mean
+from matplotlib.ticker import MultipleLocator
 
 root_import = '/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/AttitudeEquation/Data'
 root_save = '/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/AttitudeEquation/Figures_coding/4SSA'
@@ -43,22 +44,30 @@ obs_angle = obs_angle.integrate()
 fig, axs = plt.subplots(3,1, figsize=(6,5))
 axs[0].set_title('a)', loc='left')
 plt.subplots_adjust(hspace=0, right=0.8, left=0.2)
-for i, ch, dir in zip(range(3),['HJE','HJN','HJZ'], ['East','North','Up']):
+for i, ch, dir, tickloc, tickloc_ in zip(range(3),['HJE','HJN','HJZ'], ['East','North','Up'], [0.002, 0.001, 0.001],[0.0002, 0.0001, 0.0001]):
     # rotation rate
     ax = axs[i]
     color='darkred'
     trace = obs_rate.select(channel=ch)
-    ax.plot(trace[0].times(), trace[0].data, color)
+    ax.plot(trace[0].times(), trace[0].data, color, linewidth=0.6)
     ax.tick_params(axis='y', labelcolor=color)
     ax.set_ylabel('%s [rad/s]' %dir, color=color)
+    ax.yaxis.set_major_locator(MultipleLocator(tickloc))
     # angles
     ax_ = ax.twinx()
     color='red'
     trace = obs_angle.select(channel=ch)
-    ax_.plot(trace[0].times(), trace[0].data, color, linestyle='--')
+    ax_.plot(trace[0].times(), trace[0].data, color, linestyle='--', linewidth=0.6)
     ax_.tick_params(axis='y', labelcolor=color)
     ax_.set_ylabel('[rad]', color=color)
+    ax_.yaxis.set_major_locator(MultipleLocator(tickloc_))
+
+    ax.set_xlim(left=0, right=45)
+
+axs[0].tick_params(axis='x', labelcolor='white')
+axs[1].tick_params(axis='x', labelcolor='white')
 ax.set_xlabel('Time [s]')
+
 fig.savefig('%s/KilaueaEQ_Mw5_3_20180715T132550' %root_save, dpi=300)
 #fig.savefig('%s/KilaueaEQ_Ml3_18_20180712T051241' %root_save, dpi=300)
 plt.show()
