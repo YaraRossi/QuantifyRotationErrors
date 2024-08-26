@@ -202,20 +202,20 @@ fig.savefig('%s/Angle_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbo
 
 # Comparing to no rotation correction for displacement.
 #disp_obs_demean_lp, disp_obs_rc_lp, disp_euler_rc_lp, disp_rot_err_rc_lp, disp_euler_err_rc_lp
-color = ['midnightblue','cornflowerblue','red', 'k', 'grey']
-marker = ['X','D','d','*','.']
-labels = ['demean', 'rot', 'euler', 'rot + spin rc', 'euler + spin rc']
+color = ['cornflowerblue','red', 'k', 'grey']
+marker = ['D','d','*','.']
+labels = ['rot', 'euler', 'rot + spin rc', 'euler + spin rc']
 fig, axs = plt.subplots(3,2, figsize=(11,5), sharex='col')
 plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
 for neq in range(len(max_disp_hp)):
     absolut_hp = numpy.asarray(max_disp_hp[neq][0])
     absolut_lp = numpy.asarray(max_disp_lp[neq][0])
-    for j in range(1,len(max_disp_hp[neq])):
+    for j in range(2,len(max_disp_hp[neq])):
         maximum_error_hp = numpy.asarray(max_disp_hp[neq][j])
         maximum_error_lp = numpy.asarray(max_disp_lp[neq][j])
         for i in range(3):
-            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp)[i]/abs(absolut_hp[i]) * 100,color=color[j - 1], marker=marker[j - 1])
-            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp)[i]/abs(absolut_lp[i]) * 100,color=color[j - 1], marker=marker[j - 1])
+            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp)[i]/abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2])
+            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp)[i]/abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2])
 
 axs[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
 axs[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
@@ -266,20 +266,20 @@ fig.savefig('%s/Disp2_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbo
 
 
 # acc_obs_demean_lp, acc_obs_rc_m_lp, acc_euler_rc_m_lp, acc_rot_err_rc_m_lp, acc_euler_err_rc_m_lp
-color = ['midnightblue','cornflowerblue','red', 'k', 'grey']
-marker = ['X','D','d','*','.']
-labels = ['demean', 'rot', 'euler', 'rot + spin rc', 'euler + spin rc']
+color = ['cornflowerblue','red', 'k', 'grey']
+marker = ['D','d','*','.']
+labels = ['rot', 'euler', 'rot + spin rc', 'euler + spin rc']
 fig, axs = plt.subplots(3,2, figsize=(11,5), sharex='col')
 plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
 for neq in range(len(max_acc_hp)):
     absolut_hp = numpy.asarray(max_acc_hp[neq][0])
     absolut_lp = numpy.asarray(max_acc_lp[neq][0])
-    for j in range(1,len(max_acc_hp[neq])):
+    for j in range(2,len(max_acc_hp[neq])): # 2 because start at 'rot'
         maximum_error_hp = numpy.asarray(max_acc_hp[neq][j])
         maximum_error_lp = numpy.asarray(max_acc_lp[neq][j])
         for i in range(3):
-            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp)[i]/ abs(absolut_hp[i]) * 100,color=color[j - 1], marker=marker[j - 1])
-            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp)[i]/ abs(absolut_lp[i]) * 100,color=color[j - 1], marker=marker[j - 1])
+            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp)[i]/ abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2])
+            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp)[i]/ abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2])
 
 axs[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
 axs[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
