@@ -17,11 +17,11 @@ NAME = ['obs_angle' ,'obs_rr', 'euler_angle' ,'euler_angle_err', 'euler_rr', 'eu
 date = '2018_07_12T05_12_26_921263Z'#'2018_07_13T00_41_57_000000Z' #'2018_07_12T05_12_15_000000Z'
 freq = 0.1
 ss = 20
-fig1, axs1 = plt.subplots(3,2, figsize=(11,5))#, sharex=True, sharey=True)
-plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
+fig1, axs1 = plt.subplots(3,2, figsize=(9,5))#, sharex=True, sharey=True)
+plt.subplots_adjust(hspace=0.07, wspace=0.15, right=0.98)
 #plt.suptitle('Rotation Angle')
-fig2, axs2 = plt.subplots(3,2, figsize=(11,5))#, sharex=True, sharey=True)
-plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
+fig2, axs2 = plt.subplots(3,2, figsize=(9,5))#, sharex=True, sharey=True)
+plt.subplots_adjust(hspace=0.07, wspace=0.15, right=0.98)
 #plt.suptitle('Rotation Rate')
 
 for latitude in [0,15,20,30,45,60,75,90]:

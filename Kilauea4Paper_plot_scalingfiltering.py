@@ -18,12 +18,12 @@ date = '2018_07_12T05_12_15_000000Z' #'2018_07_13T00_41_57_610339Z' #'2018_07_13
 
 freq = 0.1
 ss = 20
-withother = False # at True, the other EQ's will be plotted.
-fig1, axs1 = plt.subplots(3,2, figsize=(11,5))#, sharex=True, sharey=True)
-plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
+withother = True # at True, the other EQ's will be plotted.
+fig1, axs1 = plt.subplots(3,2, figsize=(9,5), sharey=True)#, sharex=True, sharey=True)
+plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98)
 #plt.suptitle('Rotation Angle')
-fig2, axs2 = plt.subplots(3,2, figsize=(11,5))#, sharex=True, sharey=True)
-plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
+fig2, axs2 = plt.subplots(3,2, figsize=(9,5), sharey=True)#, sharex=True, sharey=True)
+plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98)
 #plt.suptitle('Rotation Rate')
 dates = ['2018_07_13T00_42_12_610339Z', '2018_07_14T04_13_18_908030Z', '2018_07_14T05_07_49_173848Z',
          '2018_07_15T13_25_50_535633Z', '2018_07_12T05_12_26_921263Z']
@@ -246,6 +246,9 @@ for ax, unit in zip([axs1,axs2],['[rad]','[rad/s]']):
         for i in range(3):
             ax[i, j].set_yscale('log')
             ax[i, j].set_xscale('log')
+            if i == 2:
+                continue
+            ax[i, j].tick_params(axis='x', labelcolor='white')
 
     ax[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
     ax[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
