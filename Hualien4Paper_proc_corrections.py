@@ -14,29 +14,17 @@ Hroot_originaldata, Hroot_savefig, Hroot_processeddata = get_rootsHualien()
 
 #station_name, Lat = 'NA01', 24.46760
 station_name, Lat = 'MDSA0', 24.02305
-starttime = UTCDateTime('2024-04-02T23:58:10')
+starttime = UTCDateTime('2024-04-02T23:58:05')
 endtime = UTCDateTime('2024-04-02T23:59:55')
 
 
-max_rot_lp = []
-max_rot_hp = []
-max_disp_lp = []
-max_disp_hp = []
-max_acc_lp = []
-max_acc_hp = []
-ts_rot_lp = []
-ts_rot_hp = []
-ts_disp_lp = []
-ts_disp_hp = []
-ts_acc_lp = []
-ts_acc_hp = []
-
 for station_name, Lat, response in zip(['NA01', 'MDSA0'],[24.46760, 24.02305], [418675, 419430]):
 
-    #makeAnglesHualien_lat_v3(station_name=station_name, starttime=starttime, endtime=endtime, ampscale = 1,latitude=Lat, fromdata = True, plot=True, savedate=True, folder = 'All_EQ')
+    makeAnglesHualien_lat_v3(station_name=station_name, starttime=starttime, endtime=endtime, ampscale = 1,latitude=Lat, fromdata = True, plot=True, savedate=True, folder = 'All_EQ')
 
-    correctAccelerationHualien_v2(station_name, starttime, endtime, ampscale=1, response =response,plot=True, savedate=False, folder='All_EQ')
+    #correctAccelerationHualien_v2(station_name, starttime, endtime, ampscale=1, response =response,plot=True, savedate=False, folder='All_EQ')
 
     '''both_maxi, both_ts = filter_plotly_maxy_Hualien_v2(station_name, starttime, endtime, ampscale=1,
-                                                       response =response, magnitude=6.9, lpfreq=0.1,
+                                                       response =response, magnitude=7.4, lpfreq=0.1,
                                                        hpfreq=0.1, plot=True, show=True)'''
+
