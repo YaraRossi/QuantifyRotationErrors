@@ -177,7 +177,8 @@ ax2.grid('on')
 ax2.set_xlim(left=0.01, right=100)
 
 # adding a specific EQ
-plt.scatter(4, 0.003, marker='*', color='yellow', edgecolors='k', s=150)
+plt.scatter(4, 0.006, marker='*', color='darkred', edgecolors='k', s=150)
+plt.scatter(4, 0.0015, marker='*', color='pink', edgecolors='k', s=150)
 
 plt.savefig(f'{root_savefig}/thesis_magamp_rotation.png', dpi=300, bbox_inches='tight')
 
