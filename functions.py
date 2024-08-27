@@ -45,7 +45,7 @@ def eq_kilauea(min_mag=4, paper = False):
     arrivaltime = []
     for index, row in file.iterrows():
         arrivaltime.append(model.get_travel_times(source_depth_in_km=abs(row['depth']),
-                                                  distance_in_degree=row['dist'])[0].time)
+                                                  distance_in_degree=row['dist_degrees'])[0].time)
     file['arrivaltime'] = arrivaltime
 
     return file
@@ -1269,151 +1269,6 @@ def filter_plotly_Kilauea(date_name='date_name', ampscale='ampscale', lpfreq = '
 
 # below here are new functions that will work with more data from various EQ's.
 
-
-def makeAnglesKilauea_v2(date_name='date_name', extra_folder = '', starttime='starttime', endtime='endtime', ampscale=1, plot=False):
-    # can handle any dates!
-    
-    root_import = '/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/AttitudeEquation/Data'
-    root_save = '/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/AttitudeEquation/Data/Processed/%s' % extra_folder
-    obs_rate  = read('%s/Kilauea_%s_HJ1.mseed' % (root_import,date_name))
-    obs_rate += read('%s/Kilauea_%s_HJ2.mseed' % (root_import,date_name))
-    obs_rate += read('%s/Kilauea_%s_HJ3.mseed' % (root_import,date_name))
-    inv = read_inventory(root_import+'/station.xml')
-
-    #### 1.2 ####
-    # slice data to only include EQ
-    obs_rate = obs_rate.slice(starttime, endtime)
-
-    #obs_rate.plot()
-
-    #### 1.3 ####
-    # correct stuff:
-    # scale data from nrad/s to rad/s
-    obs_rate.remove_sensitivity(inventory=inv)
-
-    #obs_rate.plot()
-
-    # orient the sensor correctly. it is oriented 1.8° wrong
-    obs_rate.rotate(method='->ZNE', inventory=inv, components=["123"])
-
-    #obs_rate.plot()
-
-
-
-    ##############################################################################
-    #### 2.0 Process data for attitude correction and get uncorrected angles and rotation rate.
-    #### 2.1 ####
-    # calculate earth rotation rate at that location:
-    earth_rr = earth_rotationrate(Latitude=19.420908)
-    # get earth rotation rate from data
-    e_rr_fromdata = [mean(obs_rate.select(channel='HJE')[0].data[0:2000]),
-                     mean(obs_rate.select(channel='HJN')[0].data[0:2000]),
-                     mean(obs_rate.select(channel='HJZ')[0].data[0:2000])]
-
-    #### 2.2 ####
-    # demean obsrate for direct angle calculation, but save in different name.
-    obs_rate_demean = obs_rate.copy()
-    obs_rate_demean.select(channel='HJE')[0].data = (obs_rate_demean.select(channel='HJE')[0].data-e_rr_fromdata[0])*ampscale
-    obs_rate_demean.select(channel='HJN')[0].data = (obs_rate_demean.select(channel='HJN')[0].data-e_rr_fromdata[1])*ampscale
-    obs_rate_demean.select(channel='HJZ')[0].data = (obs_rate_demean.select(channel='HJZ')[0].data-e_rr_fromdata[2])*ampscale
-
-    # integrate rotation rate to angles:
-    # instead of doing: obs_angle = obs_rate_demean.copy().integrate()
-
-
-    pre_ac_rr = numpy.vstack([obs_rate_demean.select(channel='HJE')[0].data,
-                              obs_rate_demean.select(channel='HJN')[0].data,
-                              obs_rate_demean.select(channel='HJZ')[0].data])
-    length = len(pre_ac_rr[0, :])
-    obs_angle = numpy.zeros((3, length))
-    dt = 1/obs_rate[0].stats.sampling_rate,
-    for i in range(1, length):
-        obs_angle[:,i] = obs_angle[:, i-1] + dt * pre_ac_rr[:, i-1]
-
-    pre_ac_a = obs_angle
-
-    #### 2.3 ####
-    # apply the attitude correction and the correction for earth's rotation rate.
-    for_ac_rr = numpy.vstack([obs_rate_demean.select(channel='HJE')[0].data,
-                              obs_rate_demean.select(channel='HJN')[0].data,
-                              obs_rate_demean.select(channel='HJZ')[0].data])
-    # ad the earth rotation rate back.
-    for i in range(len(for_ac_rr[0,:])):
-        for_ac_rr[:,i] = for_ac_rr[:,i] + e_rr_fromdata
-
-    euler_a, rot_a_err, euler_rr, rot_rr_err, euler_a_tot, euler_rr_tot = attitude_equation_simple(dt=1/obs_rate[0].stats.sampling_rate,
-                                                             obs_rate=for_ac_rr, earth_rr=e_rr_fromdata) #earth_rr,e_rr_fromdata
-
-
-    ##############################################################################
-    #### 3.0 Save stuff ####
-    MSEED_obs_a = obs_rate.copy()
-    MSEED_euler_a = obs_rate.copy()
-    MSEED_rot_a_err = obs_rate.copy()
-    MSEED_euler_a_tot = obs_rate.copy()
-    MSEED_obs_rr = obs_rate.copy()
-    MSEED_euler_rr = obs_rate.copy()
-    MSEED_rot_rr_err = obs_rate.copy()
-    MSEED_euler_rr_tot = obs_rate.copy()
-    MSEED = [MSEED_obs_a,MSEED_obs_rr,MSEED_euler_a,MSEED_rot_a_err,MSEED_euler_rr,MSEED_rot_rr_err, MSEED_euler_a_tot, MSEED_euler_rr_tot]
-    DATA = [pre_ac_a,pre_ac_rr,euler_a,rot_a_err,euler_rr,rot_rr_err, euler_a_tot, euler_rr_tot]
-    NAME = ['obs_angle','obs_rr', 'euler_angle','rot_angle_err', 'euler_rr', 'rot_rr_err', 'euler_angle_tot', 'euler_rr_tot']
-
-    for mseed, data, name in zip(MSEED,DATA,NAME):
-        for ch, i in zip(['HJE','HJN','HJZ'],range(3)):
-            mseed.select(channel=ch)[0].data = mseed.select(channel=ch)[0].data*0 + data[i,:]
-            starttime_str = str(starttime)
-            new_starttime = starttime_str.replace(':','_')
-            new_starttime = new_starttime.replace('-','_')
-            new_starttime = new_starttime.replace('.','_')
-            mseed.select(channel=ch).write(root_save+'/Kilauea_'+str(new_starttime)+'_'+str(ampscale)+'_'+name+'_'+ch+'.mseed')
-
-    if plot:
-        # THIS DOES NOT YET WORK
-        # TODO make this work!!
-        ##############################################################################
-        #### 4.0 ####
-        # plot stuff
-        fig, axs = plt.subplots(3, 1)
-        fig.suptitle('Rotation rate [rad/s]')
-        for i in range(3):
-            ax = axs[i]
-            ax.plot(pre_ac_rr[i, :], label='pre_ac_rr')
-            ax.plot(euler_rr[i, :], label='euler_rr')
-            ax.plot(euler_rr_err[i, :], '--', label='euler_rr_err')
-            ax.plot(euler_rr_after[i, :], '-.', label='euler_rr_after')
-        ax.legend()
-
-        fig, axs = plt.subplots(3, 1)
-        fig.suptitle('ATT Earth Error Rotation rate [rad/s]')
-        for i in range(3):
-            ax = axs[i]
-            ax.plot(pre_ac_rr[i, 1:] - euler_rr[i, 1:], label='diff obs und euler')
-            ax.plot(euler_rr[i, 1:] - euler_rr_err[i, 1:], '--', label='diff euler und euler earth corr.')
-            ax.plot(pre_ac_rr[i, 1:] - euler_rr_err[i, 1:], '-.', label='diff obs und euler earth corr.')
-        ax.legend()
-
-        fig, axs = plt.subplots(3, 1)
-        fig.suptitle('Angle [rad]')
-        for i in range(3):
-            ax = axs[i]
-            ax.plot(pre_ac_a[i, :], label='pre_ac_a')
-            ax.plot(euler_a[i, :], label='euler_a')
-            ax.plot(euler_a_err[i, :], '--', label='euler_a_err')
-            ax.plot(euler_a_after[i, :], '-.', label='euler_a_after')
-        ax.legend()
-
-        fig, axs = plt.subplots(3, 1)
-        fig.suptitle('ATT Earth Error Angle [rad]')
-        for i in range(3):
-            ax = axs[i]
-            ax.plot(pre_ac_a[i, 1:] - euler_a[i, 1:], label='diff obs und euler')
-            ax.plot(euler_a[i, 1:] - euler_a_err[i, 1:], '--', label='diff euler und euler earth corr.')
-            ax.plot(pre_ac_a[i, 1:] - euler_a_err[i, 1:], '-.', label='diff obs und euler earth corr.')
-        ax.legend()
-
-        plt.show()
-
 ####################
 # Upgrade from v2
 # latitude and scaling can be changed here simultaneously:
@@ -2377,8 +2232,8 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
                 else:
                     TSmax_acc[j][i] = maxi
 
-                # have the first one be the amplitude of motion and not the difference which is just 0.
-                if j == 0:
+                # have the first two be the amplitude of motion and not the difference which is just 0.
+                if j in [0,1]:
                     mini = numpy.min(channel.select(channel=ch[i])[0].data[start:-end])
                     maxi = numpy.max(channel.select(channel=ch[i])[0].data[start:-end])
                     if numpy.abs(mini) > maxi:
@@ -2424,8 +2279,8 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
                 else:
                     TSmax_disp[j][i] = maxi
 
-                # have the first one be the amplitude of motion and not the difference which is just 0.
-                if j == 0:
+                # have the first two be the amplitude of motion and not the difference which is just 0.
+                if j in [0,1]:
                     mini = numpy.min(channel.select(channel=ch[i])[0].data[start:-end])
                     maxi = numpy.max(channel.select(channel=ch[i])[0].data[start:-end])
                     if numpy.abs(mini) > maxi:
@@ -3075,7 +2930,7 @@ def filter_plotly_maxy_Hualien_v2(station_name='station_name', starttime='startt
 
     #### 1.4 import rotation data ####
     # import observed angles
-    starttime_str = str(starttime)
+    starttime_str = str(starttime-5)
     new_starttime = starttime_str.replace(':', '_')
     new_starttime = new_starttime.replace('-', '_')
     new_starttime = new_starttime.replace('.', '_')
@@ -3305,8 +3160,8 @@ def filter_plotly_maxy_Hualien_v2(station_name='station_name', starttime='startt
                 else:
                     TSmax_acc[j][i] = maxi
 
-                # have the first one be the amplitude of motion and not the difference which is just 0.
-                if j == 0:
+                # have the first two be the amplitude of motion and not the difference which is just 0.
+                if j in [0,1]:
                     mini = numpy.min(channel.select(channel=ch[i])[0].data[start:-end])
                     maxi = numpy.max(channel.select(channel=ch[i])[0].data[start:-end])
                     if numpy.abs(mini) > maxi:
@@ -3352,8 +3207,8 @@ def filter_plotly_maxy_Hualien_v2(station_name='station_name', starttime='startt
                 else:
                     TSmax_disp[j][i] = maxi
 
-                # have the first one be the amplitude of motion and not the difference which is just 0.
-                if j == 0:
+                # have the first two be the amplitude of motion and not the difference which is just 0.
+                if j in [0,1]:
                     mini = numpy.min(channel.select(channel=ch[i])[0].data[start:-end])
                     maxi = numpy.max(channel.select(channel=ch[i])[0].data[start:-end])
                     if numpy.abs(mini) > maxi:
