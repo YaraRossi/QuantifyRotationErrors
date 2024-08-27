@@ -7,42 +7,20 @@ from obspy import read, read_inventory, UTCDateTime
 import matplotlib.pyplot as plt
 from numpy import mean
 from attitudeequation import earth_rotationrate, attitude_equation_simple
-from functions import makeAnglesKilauea_lat_v3, correctAccelerationKilauea_v2,filter_plotly_maxy_Kilauea,filter_plotly_maxy_Kilauea_v2
+from functions import eq_kilauea, makeAnglesKilauea_lat_v3, correctAccelerationKilauea_v2,filter_plotly_maxy_Kilauea,filter_plotly_maxy_Kilauea_v2
 from roots import get_roots
 root_originaldata, root_savefig, root_processeddata = get_roots()
 
-
-def eq_kilauea(min_mag=3):
-    root = root_originaldata
-    file_ = pd.read_csv('Kilauea_EQ_201807_3MW.txt', sep=',')
-
-    file = file_[file_.mag > min_mag]
-    for i in range(len(file['depth'])):
-        if file.loc[i, 'depth'] < 0:
-            file.loc[i, 'depth'] = 0
-
-    T_lat, T_lon = 19.420908, -155.292023
-    model = TauPyModel(model="iasp91")
-
-    file['dist'] = locations2degrees(T_lat, T_lon, file['latitude'], file['longitude'])  # (lat1, long1, lat2, long2)
-    arrivaltime = []
-    for index, row in file.iterrows():
-        arrivaltime.append(model.get_travel_times(source_depth_in_km=abs(row['depth']),
-                                                  distance_in_degree=row['dist'])[0].time)
-    file['arrivaltime'] = arrivaltime
-
-    return file
 
 ############################
 #### Start Calculations ####
 
 ## 2. Other earthquakes
 # get time of various EQ's:
-minmag = 4
+minmag = 3
 ml318 = True
 
-info_eq = eq_kilauea(min_mag=minmag)
-info_eq3 = eq_kilauea(min_mag=3.17)
+info_eq = eq_kilauea(min_mag=minmag, paper=False)
 ampscale=1
 
 # get start and end times of Earthquakes:
@@ -62,30 +40,6 @@ for date_time,arrival_time, mags, dist in zip(info_eq['time'],info_eq['arrivalti
     magnitude.append(mags)
     distance.append(dist)
 
-if ml318:
-    iindex = info_eq3.index[info_eq3['time'].astype(str).str.contains('2018-07-12T05:12')].tolist()
-    info_eq_ = info_eq3.loc[iindex[0]]
-    date_time, arrival_time, mags, dist = info_eq_['time'], info_eq_['arrivaltime'], info_eq_['mag'], info_eq_['dist']
-    date_correct = date_time[0:4]+date_time[5:7]+date_time[8:10]
-    date.append(date_correct)
-    arrival.append(arrival_time)
-    if mags < 4:
-        starttime.append(UTCDateTime(date_time)+arrival_time-15)
-        endtime.append(UTCDateTime(date_time)+arrival_time+30)
-    else:
-        starttime.append(UTCDateTime(date_time)+arrival_time-15)
-        endtime.append(UTCDateTime(date_time)+arrival_time+30)
-    magnitude.append(mags)
-    distance.append(dist)
-
-'''
-for NN in range(len(info_eq['time'])):
-    try:
-        date_ = date[NN]
-        date_name = date_[0:4]+date_[5:7]+date_[8:10]
-    except Exception as e:
-        print(starttime[NN], e)'''
-
 # here I calculate a couple of eq that are larger and I just want original amplitude scale and original latitude.
 # Ml 3.18m, Mw5.3, Mw5.3, Mw5.3, Ml4.36
 
@@ -103,10 +57,10 @@ ts_disp_hp = []
 ts_acc_lp = []
 ts_acc_hp = []
 for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, endtime, magnitude, distance):
-    '''try:
+    try:
         makeAnglesKilauea_lat_v3(date_name,starttime,endtime,latitude=19.420908, ampscale=1,
                                  plot=False, savedate=True, folder='All_EQ')
-        if magnitude > 4:
+        '''if magnitude > 4:
             for ampscale in [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]:
                 makeAnglesKilauea_lat_v3(date_name, starttime, endtime, latitude=19.420908, ampscale=ampscale,
                                          plot=False, savedate=True, folder='Scaling')
@@ -122,11 +76,12 @@ for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, en
 
             for latitude in [0, 15, 20, 30, 45, 60, 75, 90]:
                 makeAnglesKilauea_lat_v3(date_name, starttime, endtime, latitude=latitude, ampscale=1, plot=False,
-                                         savedate=True, folder='Latitudes')
+                                         savedate=True, folder='Latitudes')'''
 
     except:
         print('no data for times: ' + date_name)
-        continue'''
+        continue
+    continue
 
     print('Now perform the corrections on the accelerations')
     try:
