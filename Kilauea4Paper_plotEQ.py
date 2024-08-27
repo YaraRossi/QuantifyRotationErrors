@@ -49,7 +49,7 @@ for i, ch, dir, tickloc, tickloc_ in zip(range(3),['HJE','HJN','HJZ'], ['East','
     ax = axs[i]
     color='darkred'
     trace = obs_rate.select(channel=ch)
-    ax.plot(trace[0].times(), trace[0].data, color, linewidth=0.6)
+    ax.plot(trace[0].times(), trace[0].data, color, linewidth=0.6, label='Mw 5.3, Kīlauea')
     ax.tick_params(axis='y', labelcolor=color)
     ax.set_ylabel('%s [rad/s]' %dir, color=color)
     ax.yaxis.set_major_locator(MultipleLocator(tickloc))
@@ -63,6 +63,8 @@ for i, ch, dir, tickloc, tickloc_ in zip(range(3),['HJE','HJN','HJZ'], ['East','
     ax_.yaxis.set_major_locator(MultipleLocator(tickloc_))
 
     ax.set_xlim(left=0, right=45)
+
+ax.legend(loc='lower right')
 
 axs[0].tick_params(axis='x', labelcolor='white')
 axs[1].tick_params(axis='x', labelcolor='white')
