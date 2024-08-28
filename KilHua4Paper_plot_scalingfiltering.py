@@ -361,8 +361,8 @@ for ax, unit in zip([axs1,axs2],['[rad]','[rad/s]']):
     ax[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
     ax[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
 
-    ax[2, 0].set_xlabel('$\sqrt{E^2+N^2+Z^2}$ %s' % unit)
-    ax[2, 1].set_xlabel('$\sqrt{E^2+N^2+Z^2}$ %s' % unit)
+    ax[2, 0].set_xlabel('total angle $\sqrt{E^2+N^2+Z^2}$ %s' % unit)
+    ax[2, 1].set_xlabel('total angle $\sqrt{E^2+N^2+Z^2}$ %s' % unit)
 
     ax[0, 0].set_ylabel('East Error [%]')
     ax[1, 0].set_ylabel('North Error [%]')
