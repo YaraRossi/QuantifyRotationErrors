@@ -110,7 +110,7 @@ for station_name, Lat, response in zip(['NA01', 'MDSA0'],[24.46760, 24.02305], [
 
     both_maxi, both_ts = filter_plotly_maxy_Hualien_v2(station_name, starttime, endtime, ampscale=1,
                                                        response =response, magnitude=7.4, lpfreq=0.1,
-                                                       hpfreq=0.1, plot=True, show=True)
+                                                       hpfreq=0.1, plot=True, show=False)
     # now save all the information from the EQ that have both data, and have been made into figures:
     #
     Hmax_rot_lp.append([both_maxi[0][0][0], both_maxi[0][0][1], both_maxi[0][0][2], both_maxi[0][0][3]])  # lowpass

@@ -20,11 +20,11 @@ endtime = UTCDateTime('2024-04-02T23:59:55')
 
 for station_name, Lat, response in zip(['NA01', 'MDSA0'],[24.46760, 24.02305], [418675, 419430]):
 
-    makeAnglesHualien_lat_v3(station_name=station_name, starttime=starttime, endtime=endtime, ampscale = 1,latitude=Lat, fromdata = True, plot=True, savedate=True, folder = 'All_EQ')
+    #makeAnglesHualien_lat_v3(station_name=station_name, starttime=starttime, endtime=endtime, ampscale = 1,latitude=Lat, fromdata = True, plot=False, savedate=True, folder = 'All_EQ')
 
     #correctAccelerationHualien_v2(station_name, starttime, endtime, ampscale=1, response =response,plot=True, savedate=False, folder='All_EQ')
 
-    '''both_maxi, both_ts = filter_plotly_maxy_Hualien_v2(station_name, starttime, endtime, ampscale=1,
+    both_maxi, both_ts = filter_plotly_maxy_Hualien_v2(station_name, starttime, endtime, ampscale=1,
                                                        response =response, magnitude=7.4, lpfreq=0.1,
-                                                       hpfreq=0.1, plot=True, show=True)'''
+                                                       hpfreq=0.1, plot=True, show=False)
 
