@@ -14,7 +14,7 @@ coordinates = [
     (24.02305, 121.63013, ' MDSA0'),
     (24.46760, 121.79333, ' NA01'),
 ]
-earthquake = [23.836, 121.598, ' 7.4 mw']
+earthquake = [23.836, 121.598, ' Mw 7.4']
 
 # Load GeoJSON file for finite fault using GeoPandas
 finite_fault_gdf = gpd.read_file('/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/HUalienTilt_20240402/FFM.geojson')

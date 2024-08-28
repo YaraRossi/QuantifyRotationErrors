@@ -35,10 +35,16 @@ for time, lat, lon, mag, magtype, dist in coordinates:
     else:
         ax.plot(lon, lat, marker='*', color='indianred', markersize=6, markeredgecolor='white', markeredgewidth=0.2, transform=ccrs.PlateCarree())
     if lat < 19.3995:
-        ax.text(lon, lat, f' {mag} {magtype}', color = 'white', fontsize=9, ha='left', va='top', transform=ccrs.PlateCarree())
+        if mag < 5:
+            ax.text(lon, lat, f' Ml {mag}', color = 'white', fontsize=9, ha='left', va='top', transform=ccrs.PlateCarree())
+        else:
+            ax.text(lon, lat, f' Mw {mag}', color = 'white', fontsize=9, ha='left', va='top', transform=ccrs.PlateCarree())
     else:
-        ax.text(lon, lat, f' {mag} {magtype}', color='white', fontsize=9, ha='left', va='bottom',
-                transform=ccrs.PlateCarree())
+        if mag < 5:
+            ax.text(lon, lat, f' Ml {mag}', color='white', fontsize=9, ha='left', va='bottom', transform=ccrs.PlateCarree())
+        else:
+            ax.text(lon, lat, f' Mw {mag}', color='white', fontsize=9, ha='left', va='bottom', transform=ccrs.PlateCarree())
+
 # Plot station
 ax.plot(station[1], station[0], marker='^', color='red', markersize=7, markeredgecolor='white', markeredgewidth=0.2, transform=ccrs.PlateCarree())
 ax.text(station[1], station[0], ' UWE', color = 'white', fontsize=9, ha='left', transform=ccrs.PlateCarree())
