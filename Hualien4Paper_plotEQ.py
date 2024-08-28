@@ -50,7 +50,7 @@ for i, ch, dir, tickloc, tickloc_ in zip(range(3),['HJE','HJN','HJZ'], ['East','
     ax = axs[i]
     color='pink'
     trace = obs_rate.select(channel=ch)
-    ax.plot(trace[0].times(), trace[0].data, color, linewidth=0.6, label='Mw 7.4, Hualien, %s' %station_name)
+    ax.plot(trace[0].times(), trace[0].data, color, linewidth=0.6) #, label='Mw 7.4, Hualien, %s' %station_name)
     ax.tick_params(axis='y', labelcolor=color)
     ax.set_ylabel('%s [rad/s]' %dir, color=color)
     ax.yaxis.set_major_locator(MultipleLocator(tickloc))
@@ -66,12 +66,13 @@ for i, ch, dir, tickloc, tickloc_ in zip(range(3),['HJE','HJN','HJZ'], ['East','
     ax.set_xlim(left=0, right=110)
     ax.axvline(x=45, color='k', linewidth = 1)
 
-ax.legend(loc='lower right')
+#ax2.text(x=1.2, y=0.005, s='Mw 5.3', c='darkred', size=size)
+ax.text(x=87, y=-0.0009, s='Mw 7.4, Hualien, %s' %station_name,c='k')
 
 axs[0].tick_params(axis='x', labelcolor='white')
 axs[1].tick_params(axis='x', labelcolor='white')
 ax.set_xlabel('Time [s]')
 
-fig.savefig('%s/HualienEQ_%s_20180715T132550' %(root_save,station_name), dpi=300)
+fig.savefig('%s/HualienEQ_%s_20180715T132550' %(root_save,station_name), dpi=300, bbox_inches='tight')
 plt.show()
 

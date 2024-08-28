@@ -44,12 +44,12 @@ obs_angle = obs_angle.integrate()
 fig, axs = plt.subplots(3,1, figsize=(6,5))
 axs[0].set_title('a)', loc='left')
 plt.subplots_adjust(hspace=0, right=0.8, left=0.2)
-for i, ch, dir, tickloc, tickloc_ in zip(range(3),['HJE','HJN','HJZ'], ['East','North','Up'], [0.002, 0.001, 0.001],[0.0002, 0.0001, 0.0001]):
+for i, ch, dir, tickloc, tickloc_ in zip(range(3),['HJE','HJN','HJZ'], ['East','North','Up'], [0.002, 0.001, 0.001],[0.0003, 0.0002, 0.0001]):
     # rotation rate
     ax = axs[i]
     color='darkred'
     trace = obs_rate.select(channel=ch)
-    ax.plot(trace[0].times(), trace[0].data, color, linewidth=0.6, label='Mw 5.3, Kīlauea')
+    ax.plot(trace[0].times(), trace[0].data, color, linewidth=0.6)#, label='Mw 5.3, Kīlauea, UWE')
     ax.tick_params(axis='y', labelcolor=color)
     ax.set_ylabel('%s [rad/s]' %dir, color=color)
     ax.yaxis.set_major_locator(MultipleLocator(tickloc))
@@ -64,13 +64,13 @@ for i, ch, dir, tickloc, tickloc_ in zip(range(3),['HJE','HJN','HJZ'], ['East','
 
     ax.set_xlim(left=0, right=45)
 
-ax.legend(loc='lower right')
+ax.text(x=25, y=-0.0025, s='Mw 5.3, Kīlauea, UWE',c='k')
 
 axs[0].tick_params(axis='x', labelcolor='white')
 axs[1].tick_params(axis='x', labelcolor='white')
 ax.set_xlabel('Time [s]')
 
-fig.savefig('%s/KilaueaEQ_Mw5_3_20180715T132550' %root_save, dpi=300)
+fig.savefig('%s/KilaueaEQ_Mw5_3_20180715T132550' %root_save, dpi=300, bbox_inches='tight')
 #fig.savefig('%s/KilaueaEQ_Ml3_18_20180712T051241' %root_save, dpi=300)
 plt.show()
 
