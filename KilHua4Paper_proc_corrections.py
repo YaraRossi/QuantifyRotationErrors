@@ -80,7 +80,7 @@ for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, en
     ts_disp_hp.append([both_ts[1][1][0], both_ts[1][1][1], both_ts[1][1][2], both_ts[1][1][3], both_ts[1][1][4], both_ts[1][1][5]])  # highpass
 
     ts_acc_lp.append([both_ts[0][2][0], both_ts[0][2][1], both_ts[0][2][2], both_ts[0][2][3], both_ts[0][2][4], both_ts[0][2][5]])  # lowpass
-    ts_acc_hp.append([both_ts[1][2][0], both_ts[1][2][1], both_ts[1][2][2], both_ts[1][2][3], both_ts[1][2][4], both_ts[1][2][5]])  # highpas
+    ts_acc_hp.append([both_ts[1][2][0], both_ts[1][2][1], both_ts[1][2][2], both_ts[1][2][3], both_ts[1][2][4], both_ts[1][2][5]])  # highpass
 
 
 ####################################################################################################################
@@ -110,39 +110,27 @@ for station_name, Lat, response in zip(['NA01', 'MDSA0'],[24.46760, 24.02305], [
 
     both_maxi, both_ts = filter_plotly_maxy_Hualien_v2(station_name, starttime, endtime, ampscale=1,
                                                        response =response, magnitude=7.4, lpfreq=0.1,
-                                                       hpfreq=0.1, plot=True, show=False)
+                                                       hpfreq=0.1, plot=True, show=True)
     # now save all the information from the EQ that have both data, and have been made into figures:
     #
     Hmax_rot_lp.append([both_maxi[0][0][0], both_maxi[0][0][1], both_maxi[0][0][2], both_maxi[0][0][3]])  # lowpass
     Hmax_rot_hp.append([both_maxi[1][0][0], both_maxi[1][0][1], both_maxi[1][0][2], both_maxi[1][0][3]])  # highpass
 
-    Hmax_disp_lp.append(
-        [both_maxi[0][1][0], both_maxi[0][1][1], both_maxi[0][1][2], both_maxi[0][1][3], both_maxi[0][1][4],
-         both_maxi[0][1][5]])  # lowpass
-    Hmax_disp_hp.append(
-        [both_maxi[1][1][0], both_maxi[1][1][1], both_maxi[1][1][2], both_maxi[1][1][3], both_maxi[1][1][4],
-         both_maxi[1][1][5]])  # highpass
+    Hmax_disp_lp.append([both_maxi[0][1][0], both_maxi[0][1][1], both_maxi[0][1][2], both_maxi[0][1][3], both_maxi[0][1][4], both_maxi[0][1][5]])  # lowpass
+    Hmax_disp_hp.append([both_maxi[1][1][0], both_maxi[1][1][1], both_maxi[1][1][2], both_maxi[1][1][3], both_maxi[1][1][4], both_maxi[1][1][5]])  # highpass
 
-    Hmax_acc_lp.append(
-        [both_maxi[0][2][0], both_maxi[0][2][1], both_maxi[0][2][2], both_maxi[0][2][3], both_maxi[0][2][4],
-         both_maxi[0][2][5]])  # lowpass
-    Hmax_acc_hp.append(
-        [both_maxi[1][2][0], both_maxi[1][2][1], both_maxi[1][2][2], both_maxi[1][2][3], both_maxi[1][2][4],
-         both_maxi[1][2][5]])  # highpas
+    Hmax_acc_lp.append([both_maxi[0][2][0], both_maxi[0][2][1], both_maxi[0][2][2], both_maxi[0][2][3], both_maxi[0][2][4] ,both_maxi[0][2][5]])  # lowpass
+    Hmax_acc_hp.append([both_maxi[1][2][0], both_maxi[1][2][1], both_maxi[1][2][2], both_maxi[1][2][3], both_maxi[1][2][4], both_maxi[1][2][5]])  # highpas
 
     # Timeseries
     Hts_rot_lp.append([both_ts[0][0][0], both_ts[0][0][1], both_ts[0][0][2], both_ts[0][0][3]])  # lowpass
     Hts_rot_hp.append([both_ts[1][0][0], both_ts[1][0][1], both_ts[1][0][2], both_ts[1][0][3]])  # highpass
 
-    Hts_disp_lp.append([both_ts[0][1][0], both_ts[0][1][1], both_ts[0][1][2], both_ts[0][1][3], both_ts[0][1][4],
-                       both_ts[0][1][5]])  # lowpass
-    Hts_disp_hp.append([both_ts[1][1][0], both_ts[1][1][1], both_ts[1][1][2], both_ts[1][1][3], both_ts[1][1][4],
-                       both_ts[1][1][5]])  # highpass
+    Hts_disp_lp.append([both_ts[0][1][0], both_ts[0][1][1], both_ts[0][1][2], both_ts[0][1][3], both_ts[0][1][4], both_ts[0][1][5]])  # lowpass
+    Hts_disp_hp.append([both_ts[1][1][0], both_ts[1][1][1], both_ts[1][1][2], both_ts[1][1][3], both_ts[1][1][4], both_ts[1][1][5]])  # highpass
 
-    Hts_acc_lp.append([both_ts[0][2][0], both_ts[0][2][1], both_ts[0][2][2], both_ts[0][2][3], both_ts[0][2][4],
-                      both_ts[0][2][5]])  # lowpass
-    Hts_acc_hp.append([both_ts[1][2][0], both_ts[1][2][1], both_ts[1][2][2], both_ts[1][2][3], both_ts[1][2][4],
-                      both_ts[1][2][5]])  # highpas
+    Hts_acc_lp.append([both_ts[0][2][0], both_ts[0][2][1], both_ts[0][2][2], both_ts[0][2][3], both_ts[0][2][4], both_ts[0][2][5]])  # lowpass
+    Hts_acc_hp.append([both_ts[1][2][0], both_ts[1][2][1], both_ts[1][2][2], both_ts[1][2][3], both_ts[1][2][4], both_ts[1][2][5]])  # highpass
 
 ####################################################################################################################
 ######################################### Figure for both Hualien & Kilaues ########################################
@@ -164,8 +152,8 @@ for neq in range(len(max_rot_hp)):
         maximum_error_hp = numpy.asarray(max_rot_hp[neq][j])
         maximum_error_lp = numpy.asarray(max_rot_lp[neq][j])
         for i in range(3):
-            axs[i,0].scatter(abs(absolut_hp[i]), abs(maximum_error_hp)[i]/abs(absolut_hp[i])*100, color=color[j-1], marker=marker[j-1], s=20)
-            axs[i,1].scatter(abs(absolut_lp[i]), abs(maximum_error_lp)[i]/abs(absolut_lp[i])*100, color=color[j-1], marker=marker[j-1], s=20)
+            axs[i,0].scatter(abs(absolut_hp[i]), abs(maximum_error_hp[i])/abs(absolut_hp[i])*100, color=color[j-1], marker=marker[j-1], s=20)
+            axs[i,1].scatter(abs(absolut_lp[i]), abs(maximum_error_lp[i])/abs(absolut_lp[i])*100, color=color[j-1], marker=marker[j-1], s=20)
 # Hualien
 for neq in range(len(Hmax_rot_hp)):
     absolut_hp = numpy.asarray(Hmax_rot_hp[neq][1])
@@ -174,8 +162,8 @@ for neq in range(len(Hmax_rot_hp)):
         maximum_error_hp = numpy.asarray(Hmax_rot_hp[neq][j])
         maximum_error_lp = numpy.asarray(Hmax_rot_lp[neq][j])
         for i in range(3):
-            axs[i,0].scatter(abs(absolut_hp[i]), abs(maximum_error_hp)[i]/abs(absolut_hp[i])*100, color=color[j-1], marker=marker[j-1], s=80)
-            axs[i,1].scatter(abs(absolut_lp[i]), abs(maximum_error_lp)[i]/abs(absolut_lp[i])*100, color=color[j-1], marker=marker[j-1], s=80)
+            axs[i,0].scatter(abs(absolut_hp[i]), abs(maximum_error_hp[i])/abs(absolut_hp[i])*100, color=color[j-1], marker=marker[j-1], s=80)
+            axs[i,1].scatter(abs(absolut_lp[i]), abs(maximum_error_lp[i])/abs(absolut_lp[i])*100, color=color[j-1], marker=marker[j-1], s=80)
 
 axs[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
 axs[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
@@ -211,8 +199,8 @@ for neq in range(len(max_disp_hp)):
         maximum_error_hp = numpy.asarray(max_disp_hp[neq][j])
         maximum_error_lp = numpy.asarray(max_disp_lp[neq][j])
         for i in range(3):
-            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp)[i]/abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20)
-            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp)[i]/abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20)
+            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp[i])/abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20)
+            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp[i])/abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20)
 # Hualien
 for neq in range(len(Hmax_disp_hp)):
     absolut_hp = numpy.asarray(Hmax_disp_hp[neq][1])
@@ -221,8 +209,8 @@ for neq in range(len(Hmax_disp_hp)):
         maximum_error_hp = numpy.asarray(Hmax_disp_hp[neq][j])
         maximum_error_lp = numpy.asarray(Hmax_disp_lp[neq][j])
         for i in range(3):
-            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp)[i]/abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80)
-            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp)[i]/abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80)
+            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp[i])/abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80)
+            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp[i])/abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80)
 
 axs[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
 axs[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
@@ -255,8 +243,8 @@ for neq in range(len(max_acc_hp)):
         maximum_error_hp = numpy.asarray(max_acc_hp[neq][j])
         maximum_error_lp = numpy.asarray(max_acc_lp[neq][j])
         for i in range(3):
-            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp)[i]/ abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20)
-            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp)[i]/ abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20)
+            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp[i])/ abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20)
+            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp[i])/ abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20)
 # Hualien
 for neq in range(len(Hmax_acc_hp)):
     absolut_hp = numpy.asarray(Hmax_acc_hp[neq][1])
@@ -265,8 +253,8 @@ for neq in range(len(Hmax_acc_hp)):
         maximum_error_hp = numpy.asarray(Hmax_acc_hp[neq][j])
         maximum_error_lp = numpy.asarray(Hmax_acc_lp[neq][j])
         for i in range(3):
-            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp)[i]/ abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80)
-            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp)[i]/ abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80)
+            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp[i])/ abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80)
+            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp[i])/ abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80)
 
 axs[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
 axs[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
