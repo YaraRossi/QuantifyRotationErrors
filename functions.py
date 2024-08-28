@@ -2299,7 +2299,10 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
             ######################## Plot Time Series
             fig, axs = plt.subplots(9, 1, figsize=(11, 12), sharex=True)
             plt.subplots_adjust(hspace=0, top=0.95, bottom=0.07)
-            plt.suptitle('TimeSeries Comparisons for an M' + str(magnitude))
+            if magnitude < 5:
+                plt.suptitle('Timeseries Comparisons for an Ml ' + str(magnitude))
+            elif magnitude > 5:
+                plt.suptitle('Timeseries Comparisons for an Mw ' + str(magnitude))
             x_ticks = ['obs. ', 'obs. \ndemeaned', 'rot', 'euler', 'rot + spin rc', 'euler + spin rc']
 
             # rotation
@@ -2323,9 +2326,9 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
                 ax.set_ylabel('%s [m]' % direction[i])
                 for j in range(6):
                     ax.plot(time, TS_disp[j][i], linestyle=liner[j], color=color[j], label=x_ticks[j])
-                    top = numpy.max([TS_disp[1][i],TS_disp[2][i],TS_disp[3][i],TS_disp[4][i],TS_disp[5][i]])*1.2
-                    bottom = numpy.min([TS_disp[1][i],TS_disp[2][i],TS_disp[3][i],TS_disp[4][i],TS_disp[5][i]])*1.2
-                    ax.set_ylim(top= top, bottom = bottom)
+                    #top = numpy.max([TS_disp[1][i],TS_disp[2][i],TS_disp[3][i],TS_disp[4][i],TS_disp[5][i]])*1.2
+                    #bottom = numpy.min([TS_disp[1][i],TS_disp[2][i],TS_disp[3][i],TS_disp[4][i],TS_disp[5][i]])*1.2
+                    #ax.set_ylim(top= top, bottom = bottom)
             ax.legend(loc='upper left', fontsize=fontsize)
 
             # acceleration
@@ -2345,7 +2348,10 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
 
             fig, axs = plt.subplots(9, 1, figsize=(11, 12), sharex=True)
             plt.subplots_adjust(hspace=0, top=0.95, bottom=0.07)
-            plt.suptitle('TimeSeries Difference Comparisons for an M' + str(magnitude))
+            if magnitude < 5:
+                plt.suptitle('TimeSeries Difference Comparisons for an Ml ' + str(magnitude))
+            elif magnitude > 5:
+                plt.suptitle('TimeSeries Difference Comparisons for an Mw ' + str(magnitude))
             x_ticks = ['obs.', 'obs. \ndemeaned', 'rot', 'euler', 'rot + spin rc', 'euler + spin rc']
 
             # rotation
@@ -3227,7 +3233,10 @@ def filter_plotly_maxy_Hualien_v2(station_name='station_name', starttime='startt
             ######################## Plot Time Series
             fig, axs = plt.subplots(9, 1, figsize=(11, 12), sharex=True)
             plt.subplots_adjust(hspace=0, top=0.95, bottom=0.07)
-            plt.suptitle('TimeSeries Comparison for an M' + str(magnitude))
+            if magnitude < 5:
+                plt.suptitle('Timeseries Comparisons for an Ml ' + str(magnitude))
+            elif magnitude > 5:
+                plt.suptitle('Timeseries Comparisons for an Mw ' + str(magnitude))
             x_ticks = ['obs. ', 'obs. \ndemeaned', 'rot', 'euler', 'rot + spin rc', 'euler + spin rc']
 
             # rotation
@@ -3253,6 +3262,10 @@ def filter_plotly_maxy_Hualien_v2(station_name='station_name', starttime='startt
                     ax.plot(time, TS_disp[j][i], linestyle=liner[j], color=color[j], label=x_ticks[j])
                     top = numpy.max([TS_disp[1][i],TS_disp[2][i],TS_disp[3][i],TS_disp[4][i],TS_disp[5][i]])*1.2
                     bottom = numpy.min([TS_disp[1][i],TS_disp[2][i],TS_disp[3][i],TS_disp[4][i],TS_disp[5][i]])*1.2
+                    if top == 0:
+                        top = bottom*0.1
+                    elif bottom == 0:
+                        bottom = top*0.1
                     ax.set_ylim(top= top, bottom = bottom)
             ax.legend(loc='upper left', fontsize=fontsize)
 
@@ -3273,7 +3286,10 @@ def filter_plotly_maxy_Hualien_v2(station_name='station_name', starttime='startt
 
             fig, axs = plt.subplots(9, 1, figsize=(11, 12), sharex=True)
             plt.subplots_adjust(hspace=0, top=0.95, bottom=0.07)
-            plt.suptitle('TimeSeries Difference Comparison for an M' + str(magnitude))
+            if magnitude < 5:
+                plt.suptitle('Timeseries Difference Comparisons for an Ml ' + str(magnitude))
+            elif magnitude > 5:
+                plt.suptitle('Timeseries Difference Comparisons for an Mw ' + str(magnitude))
             x_ticks = ['obs.', 'obs. \ndemeaned', 'rot', 'euler', 'rot + spin rc', 'euler + spin rc']
 
             # rotation
