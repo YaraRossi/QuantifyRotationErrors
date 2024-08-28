@@ -41,7 +41,7 @@ for time, lat, lon, mag, magtype, dist in coordinates:
                 transform=ccrs.PlateCarree())
 # Plot station
 ax.plot(station[1], station[0], marker='^', color='red', markersize=7, markeredgecolor='white', markeredgewidth=0.2, transform=ccrs.PlateCarree())
-ax.text(station[1], station[0], ' Station', color = 'white', fontsize=9, ha='left', transform=ccrs.PlateCarree())
+ax.text(station[1], station[0], ' UWE', color = 'white', fontsize=9, ha='left', transform=ccrs.PlateCarree())
 
 # Set extent around Kilauea volcano (latitude, longitude)
 ax.set_extent([-155.305, -155.245, 19.38, 19.44], crs=ccrs.PlateCarree())
