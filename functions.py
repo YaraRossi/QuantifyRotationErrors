@@ -2357,7 +2357,7 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
                 ax.set_ylabel(r'%s [$\frac{rad}{rad}\%%$]' % direction[i])
                 for j in range(4):
                     #ax.plot(time, TSdiff_rot[j][i], linestyle=liner[j], color=color[j], label=x_ticks[2 + j])
-                    ax.plot(time, TSdiff_rot[j][i][:]/max(abs(numpy.asarray(TS_rot[0][i][:]))), linestyle=liner[j], color=color[j], label=x_ticks[2 + j])
+                    ax.plot(time, TSdiff_rot[j][i][:]/max(abs(numpy.asarray(TS_rot[0][i][:])))*100, linestyle=liner[j], color=color[j], label=x_ticks[2 + j])
                     #ax.axhline(TSmax_rot[j][i], linestyle=(0, (5, 10)), color=color[j])
             ax.legend(loc='upper left', fontsize=fontsize)
 
@@ -2372,7 +2372,7 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
                 ax.set_ylabel(r'%s [$\frac{m}{m}\%%$]' % direction[i])
                 for j in range(6):
                     #ax.plot(time, TSdiff_disp[j][i], linestyle=liner[j], color=color[j], label=x_ticks[j])
-                    ax.plot(time, TSdiff_disp[j][i][:]/max(abs(numpy.asarray(TS_disp[0][i][:]))), linestyle=liner[j], color=color[j], label=x_ticks[j])
+                    ax.plot(time, TSdiff_disp[j][i][:]/max(abs(numpy.asarray(TS_disp[0][i][:])))*100, linestyle=liner[j], color=color[j], label=x_ticks[j])
                     #ax.axhline(TSmax_disp[j][i], linestyle=(0, (5, 10)), color=color[j])
             ax.legend(loc='upper left', fontsize=fontsize)
 
@@ -2385,7 +2385,7 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
                 ax.set_ylabel(r'%s [$\frac{m/s/s}{m/s/s}\%%$]' % direction[i])
                 for j in range(6):
                     #ax.plot(time, TSdiff_acc[j][i], linestyle=liner[j], color=color[j], label=x_ticks[j])
-                    ax.plot(time, TSdiff_acc[j][i][:]/max(abs(numpy.asarray(TS_acc[0][i][:]))), linestyle=liner[j], color=color[j], label=x_ticks[j])
+                    ax.plot(time, TSdiff_acc[j][i][:]/max(abs(numpy.asarray(TS_acc[0][i][:])))*100, linestyle=liner[j], color=color[j], label=x_ticks[j])
                     #ax.axhline(TSmax_acc[j][i], linestyle=(0, (5, 10)), color=color[j])
             ax.legend(loc='upper left', fontsize=fontsize)
 
@@ -3124,7 +3124,7 @@ def filter_plotly_maxy_Hualien_v2(station_name='station_name', starttime='startt
                 TS_rot[j][i] = channel.select(channel=ch[i])[0].data[start:-end]
 
         # acceleration
-        base = obs_acc_lp
+        base = acc_obs_demean_lp
         data = [obs_acc_lp, acc_obs_demean_lp, acc_obs_rc_m_lp, acc_euler_rc_m_lp, acc_rot_err_rc_m_lp, acc_euler_err_rc_m_lp]
         NN = len(data)
         ch = ['HLE', 'HLN', 'HLZ']
@@ -3171,7 +3171,7 @@ def filter_plotly_maxy_Hualien_v2(station_name='station_name', starttime='startt
                 TS_acc[j][i] = channel.select(channel=ch[i])[0].data[start:-end]
 
         # displacement
-        base = disp_obs_lp
+        base = disp_obs_demean_lp
         data = [disp_obs_lp, disp_obs_demean_lp, disp_obs_rc_lp, disp_euler_rc_lp, disp_rot_err_rc_lp, disp_euler_err_rc_lp]
         ch = ['HLE', 'HLN', 'HLZ']
         NN = len(data)
