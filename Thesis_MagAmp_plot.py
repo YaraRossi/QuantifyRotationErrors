@@ -127,8 +127,8 @@ ax1.text(x=0.012, y=gravi * 1.2, s='Gravity', c='blue', size=size)
 plt.savefig(f'{root_savefig}/thesis_magamp_acceleration.png', dpi=300, bbox_inches='tight')
 
 # Second Figure
-fig2, ax2 = plt.subplots(figsize=(5, 5))
-plt.subplots_adjust(left=0.2, right=0.97)
+fig2, ax2 = plt.subplots(figsize=(5.37, 5))
+plt.subplots_adjust(left=0.03, right=0.80, bottom=0.094)
 ax2.plot(freq, blue, color='red', linestyle='-.')
 ax2.set_title('b)', loc='left')
 plt.arrow(0.17, 0.75, -0.12, 0, head_width=0.03, head_length=0.03, fc='blue', ec='blue', transform=ax2.transAxes, zorder=20)
@@ -171,6 +171,9 @@ legend_patches = [line1, line3]
 legend_labels = ['near field @ 10 km', 'far field @ 2000 km']
 ax2.legend(legend_patches, legend_labels, loc='lower right')
 
+ax2.yaxis.tick_right()
+ax2.yaxis.set_label_position('right')
+
 ax2.set_ylabel('Rotation rate [rad/s]')
 ax2.set_xlabel('Frequency [Hz]')
 ax2.grid('on')
@@ -178,7 +181,9 @@ ax2.set_xlim(left=0.01, right=100)
 
 # adding a specific EQ
 plt.scatter(4, 0.006, marker='*', color='darkred', edgecolors='k', s=150)
+ax2.text(x=1.2, y=0.005, s='Mw 5.3', c='darkred', size=size)
 plt.scatter(4, 0.0015, marker='*', color='pink', edgecolors='k', s=150)
+ax2.text(x=1.2, y=0.00065, s='Mw 7.4', c='pink', size=size)
 
 plt.savefig(f'{root_savefig}/thesis_magamp_rotation.png', dpi=300, bbox_inches='tight')
 
