@@ -1,10 +1,5 @@
-import os
-
-import numpy
-import obspy
 import matplotlib.pyplot as plt
-from obspy import read, read_inventory
-from numpy import mean
+from obspy import read
 from roots import get_roots
 root_originaldata, root_savefig, root_processeddata = get_roots()
 

@@ -1,12 +1,6 @@
 import numpy
-import obspy
-import pandas as pd
-from obspy.taup import TauPyModel
-from obspy.geodetics import locations2degrees
 from obspy import read, read_inventory, UTCDateTime
 import matplotlib.pyplot as plt
-from numpy import mean
-from attitudeequation import earth_rotationrate, attitude_equation_simple
 from functions import eq_kilauea,filter_plotly_maxy_Kilauea_v2, filter_plotly_maxy_Hualien_v2
 from roots import get_roots, get_rootsHualien
 Hroot_originaldata, Hroot_savefig, Hroot_processeddata = get_rootsHualien()
