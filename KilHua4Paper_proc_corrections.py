@@ -106,7 +106,7 @@ Hts_disp_hp = []
 Hts_acc_lp = []
 Hts_acc_hp = []
 
-for station_name, Lat, response in zip(['NA01', 'MDSA0'],[24.46760, 24.02305], [418675, 419430]):
+for station_name, Lat, response in zip(['NA01', 'MDSA0'],[24.46760, 24.02305], [419430*1.02, 418675*0.51]):
 
     both_maxi, both_ts = filter_plotly_maxy_Hualien_v2(station_name, starttime, endtime, ampscale=1,
                                                        response =response, magnitude=7.4, lpfreq=0.1,
@@ -139,11 +139,11 @@ for station_name, Lat, response in zip(['NA01', 'MDSA0'],[24.46760, 24.02305], [
 # Now plot the error over max displacement etc.
 color = ['red', 'k', 'grey']
 marker = ['d', '*', '.']
-labels = ['euler', 'rot + spin rc', 'euler + spin rc']
+labels = ['misorientation rot.', 'rot + spin rc', 'misorientation rot. + spin rc']
 # euler_a_all_lp, rot_a_err_all_lp, euler_a_err_all_lp
 # Rotation
 fig, axs = plt.subplots(3,2, figsize=(11,5), sharex='col')
-plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
+plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98, top=0.84)
 # Kilauea
 for neq in range(len(max_rot_hp)):
     absolut_hp = numpy.asarray(max_rot_hp[neq][1])
@@ -188,9 +188,9 @@ fig.savefig('%s/Angle_error_M%s_4paperKH.png' %(root_savefig,minmag), dpi=300, b
 #disp_obs_demean_lp, disp_obs_rc_lp, disp_euler_rc_lp, disp_rot_err_rc_lp, disp_euler_err_rc_lp
 color = ['cornflowerblue', 'red', 'k', 'grey']
 marker = ['D', 'd', '*', '.']
-labels = ['rot', 'euler', 'rot + spin rc', 'euler + spin rc']
-fig, axs = plt.subplots(3,2, figsize=(11,5), sharex='col')
-plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
+labels = ['rot', 'misorientation rot.', 'rot + spin rc', 'misorientation rot. + spin rc']
+fig, axs = plt.subplots(3,2, figsize=(11,5), sharex=True, sharey=True)
+plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98, top=0.84)
 # Kilauea
 for neq in range(len(max_disp_hp)):
     absolut_hp = numpy.asarray(max_disp_hp[neq][1])
@@ -232,9 +232,9 @@ fig.savefig('%s/Disp_error_M%s_4paperKH.png' %(root_savefig,minmag), dpi=300, bb
 # acc_obs_demean_lp, acc_obs_rc_m_lp, acc_euler_rc_m_lp, acc_rot_err_rc_m_lp, acc_euler_err_rc_m_lp
 color = ['cornflowerblue', 'red', 'k', 'grey']
 marker = ['D', 'd', '*', '.']
-labels = ['rot', 'euler', 'rot + spin rc', 'euler + spin rc']
-fig, axs = plt.subplots(3,2, figsize=(11,5), sharex='col')
-plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
+labels = ['rot', 'misorientation rot.', 'rot + spin rc', 'misorientation rot. + spin rc']
+fig, axs = plt.subplots(3,2, figsize=(11,5), sharex=True, sharey=True)
+plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98, top=0.84)
 # Kilauea
 for neq in range(len(max_acc_hp)):
     absolut_hp = numpy.asarray(max_acc_hp[neq][1])
