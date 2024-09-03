@@ -262,7 +262,7 @@ for ax, unit in zip([axs1,axs2],['[rad]','[rad/s]']):
 
 color = ['red', 'k']
 marker = ['d', '*']
-labels = ['euler', 'rot + spin rc']
+labels = ['rot. misorientation', 'rot + spin rc']
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
 fig2.legend(handles=custom_lines, loc='upper right', ncol=len(labels))
 fig1.legend(handles=custom_lines, loc='upper right', ncol=len(labels))
