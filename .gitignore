@@ -1,5 +1,10 @@
 # Ignore a specific file
 ../Working/Old_files/Kilauea4Paper_proc_scalelat_DONTUSE.py
+Hualien4Paper_proc_corrections.py
+Kilauea4Paper_plot_scalingfiltering.py
+Kilauea4Paper_proc_corrections.py
+Kilauea4Paper_timeseries.py
+
 
 
 
