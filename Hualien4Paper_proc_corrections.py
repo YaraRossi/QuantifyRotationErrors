@@ -18,7 +18,7 @@ starttime = UTCDateTime('2024-04-02T23:58:05')
 endtime = UTCDateTime('2024-04-02T23:59:55')
 
 
-for station_name, Lat, response in zip(['NA01', 'MDSA0'],[24.46760, 24.02305], [418675, 419430]):
+for station_name, Lat, response in zip(['NA01', 'MDSA0'],[24.46760, 24.02305], [419430*1.02, 418675*0.51]):
 
     #makeAnglesHualien_lat_v3(station_name=station_name, starttime=starttime, endtime=endtime, ampscale = 1,latitude=Lat, fromdata = True, plot=False, savedate=True, folder = 'All_EQ')
 
