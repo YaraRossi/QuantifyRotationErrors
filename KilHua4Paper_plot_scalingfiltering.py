@@ -20,10 +20,10 @@ date = '2018_07_12T05_12_15_000000Z' #'2018_07_13T00_41_57_610339Z' #'2018_07_13
 freq = 0.1
 ss = 20
 withother = True # at True, the other EQ's will be plotted.
-fig1, axs1 = plt.subplots(3,2, figsize=(9,5), sharey=True)#, sharex=True, sharey=True)
+fig1, axs1 = plt.subplots(3,2, figsize=(9,5), sharex=True, sharey=True)
 plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98, top=0.84)
 #plt.suptitle('Rotation Angle')
-fig2, axs2 = plt.subplots(3,2, figsize=(9,5), sharey=True)#, sharex=True, sharey=True)
+fig2, axs2 = plt.subplots(3,2, figsize=(9,5), sharex=True, sharey=True)
 plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98, top=0.84)
 
 ####################################################################################################################
@@ -370,7 +370,7 @@ for ax, unit in zip([axs1,axs2],['[rad]','[rad/s]']):
 
 color = ['red', 'k', 'indianred', 'grey', 'pink', 'lightgrey']
 marker = ['d', '*', 'd', '*', 'd', '*']
-labels = ['scaled (euler)', 'scaled (rot + spin rc)', 'Kīlauea (euler)', 'Kīlauea (rot + spin rc)', 'Hualien (euler)', 'Hualien (rot + spin rc)']
+labels = ['scaled (misorientation rot.)', 'scaled (rot + spin rc)', 'Kīlauea (misorientation rot.)', 'Kīlauea (rot + spin rc)', 'Hualien (misorientation rot.)', 'Hualien (rot + spin rc)']
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
 fig2.legend(handles=custom_lines, loc='upper right', ncol=int(len(labels)/2))
 fig1.legend(handles=custom_lines, loc='upper right', ncol=int(len(labels)/2))
