@@ -1,9 +1,11 @@
 # AttitudeEquations
 
 ## Create the virtual environment
-Requirements are in: requirements_env.txt
+Requirements are in: requirements_env.txt or environment.yml
 
 > pip install -r requirements_env.txt
+OR
+> conda env create -f environment.yml
 
 ## Define roots
 In the file roots.py you need to define the roots to the different folders:
