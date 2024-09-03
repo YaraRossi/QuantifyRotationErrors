@@ -10,7 +10,7 @@ Hroot_originaldata, Hroot_savefig, Hroot_processeddata = get_rootsHualien()
 root_import = '/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/AttitudeEquation/Data'
 root_save = '/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/AttitudeEquation/Figures_coding/4SSA'
 #station_name, tickloc_rad = 'NA01', [0.00002, 0.00002, 0.00004]
-station_name, tickloc_rad = 'MDSA0', [0.0001, 0.00005, 0.0001]
+station_name, tickloc_rad = 'MDSA0', [0.0001, 0.0001, 0.0001]
 obs_rate = read('%s/TW.%s.01.HJE.D.2024.093.MSEED' % (Hroot_originaldata, station_name))
 obs_rate += read('%s/TW.%s.01.HJN.D.2024.093.MSEED' % (Hroot_originaldata, station_name))
 obs_rate += read('%s/TW.%s.01.HJZ.D.2024.093.MSEED' % (Hroot_originaldata, station_name))
@@ -41,11 +41,11 @@ for ch, offset in zip(['HJE','HJN','HJZ'],e_rr_fromdata):
 obs_angle = obs_rate.copy()
 obs_angle = obs_angle.integrate()
 
-fig, axs = plt.subplots(3,1, figsize=(11.35,5))
+fig, axs = plt.subplots(3,1, figsize=(11.35,5), sharex=True)
 axs[0].set_title('c)', loc='left')
 plt.subplots_adjust(hspace=0) #, right=0.8, left=0.2)
-for i, ch, dir, tickloc, tickloc_ in zip(range(3),['HJE','HJN','HJZ'], ['East','North','Up'],
-                                         [0.001, 0.001, 0.0005],tickloc_rad):
+for i, ch, dir, tickloc, tickloc_, ylim, ylim_ in zip(range(3),['HJE','HJN','HJZ'], ['East','North','Up'],
+                                         [0.001, 0.001, 0.001],tickloc_rad, [0.0013, 0.0013, 0.0013], [0.00023, 0.00023,0.00023]):
     # rotation rate
     ax = axs[i]
     color='pink'
@@ -64,6 +64,8 @@ for i, ch, dir, tickloc, tickloc_ in zip(range(3),['HJE','HJN','HJZ'], ['East','
     ax_.yaxis.set_major_locator(MultipleLocator(tickloc_))
 
     ax.set_xlim(left=0, right=110)
+    ax.set_ylim(top=ylim, bottom=-1*ylim)
+    ax_.set_ylim(top=ylim_, bottom=-0.8*ylim_)
     ax.axvline(x=45, color='k', linewidth = 1)
 
 #ax2.text(x=1.2, y=0.005, s='Mw 5.3', c='darkred', size=size)
