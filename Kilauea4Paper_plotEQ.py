@@ -44,7 +44,9 @@ obs_angle = obs_angle.integrate()
 fig, axs = plt.subplots(3,1, figsize=(6,5))
 axs[0].set_title('a)', loc='left')
 plt.subplots_adjust(hspace=0, right=0.8, left=0.2)
-for i, ch, dir, tickloc, tickloc_ in zip(range(3),['HJE','HJN','HJZ'], ['East','North','Up'], [0.002, 0.001, 0.001],[0.0003, 0.0002, 0.0001]):
+for i, ch, dir, tickloc, tickloc_, ylim, ylim_ in zip(range(3),['HJE','HJN','HJZ'], ['East','North','Up'],
+                                                      [0.002, 0.002, 0.002],[0.0002, 0.0002, 0.0002],
+                                                      [0.007, 0.007, 0.007], [0.00075, 0.00075, 0.00075]):
     # rotation rate
     ax = axs[i]
     color='darkred'
@@ -63,6 +65,8 @@ for i, ch, dir, tickloc, tickloc_ in zip(range(3),['HJE','HJN','HJZ'], ['East','
     ax_.yaxis.set_major_locator(MultipleLocator(tickloc_))
 
     ax.set_xlim(left=0, right=45)
+    ax.set_ylim(top = ylim, bottom=-0.8*ylim)
+    ax_.set_ylim(top = 0.5*ylim_, bottom=-1*ylim_)
 
 ax.text(x=25, y=-0.0025, s='Mw 5.3, Kīlauea, UWE',c='k')
 
