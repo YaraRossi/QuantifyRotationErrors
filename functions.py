@@ -2916,7 +2916,7 @@ def filter_plotly_maxy_Hualien_v2(station_name='station_name', starttime='startt
 
     #### 1.2 ####
     # slice data to only include EQ
-    obs_acc_ = obs_acc_.slice(starttime-5, endtime+5)
+    obs_acc_ = obs_acc_.slice(starttime-10, endtime+60)
 
     #### 1.3 ####
     # correct stuff:
