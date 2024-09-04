@@ -35,9 +35,11 @@ Figures
 
 
 ## Import data
-To get data: run find_load_EQ.py
+To get Kilauea data: run find_load_EQ.py, which uses the file Kilauea_EQ_201807_3MS.txt. In that file all the Big Island Hawaii earthquakes > MW 3 are noted for months 7 - 10 in 2018, this was downloaded from USGS website.
 
 > find_load_EQ.py
+
+Download Hualien data from zenodo folder separately.
 
 
 ## Processing rotation data
@@ -97,4 +99,7 @@ Hualien4Paper_plotEQ.py
 
 > Thesis_MagAmp_plot.py (Fig. 3b)
 
+## Additional files
+- The file functions.py has the 7 main functions handling all of the data.
+- The file attitudeequation.py has functions that provide the attitude and earth spin correction as well as the rotation correction for the accelerometer.
 
