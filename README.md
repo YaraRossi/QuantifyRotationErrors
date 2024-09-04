@@ -15,6 +15,7 @@ In the file roots.py you need to define the roots to the different folders:
 3. Figures
 
 My folder structure was like this:
+
 Data
 - Original
 - Processed
