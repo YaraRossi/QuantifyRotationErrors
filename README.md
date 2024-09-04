@@ -92,4 +92,8 @@ Hualien4Paper_plotEQ.py
 > Map_Cartopy_Kilauea.py #(Fig. 1a)
 > Map_Cartopy_Hualien.py #(Fig. 1b)
 
+- Plotting the Amplitudes for various earthquake magnitudes run Thesis_MagAmp_plot.py
+
+> Thesis_MagAmp_plot.py (Fig. 3b)
+
 
