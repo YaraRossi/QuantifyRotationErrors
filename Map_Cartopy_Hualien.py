@@ -67,3 +67,23 @@ gridlines.right_labels = False
 plt.title('(b)', loc='left')
 plt.savefig('%s/Map_Hualien.png' % root_savefig, dpi=300, bbox_inches='tight')
 plt.show()
+
+'''# get Rrupt
+# projection obnject
+p = Geod(ellps='WGS84')
+
+# lon will have as many rows as Vs30 points and as many columns as subfautls in rupture
+Nsubfaults = len(finite_fault[:, 0])
+Nvs30 = 1
+lon_surface = numpy.tile(station_lon, (Nsubfaults, 1)).T
+lat_surface = numpy.tile(station_lat, (Nsubfaults, 1)).T
+lon_subfaults = numpy.tile(finite_fault[:, 2], (Nvs30, 1)) - 360
+lat_subfaults = numpy.tile(finite_fault[:, 3], (Nvs30, 1))
+az, baz, dist = p.inv(lon_surface, lat_surface, lon_subfaults, lat_subfaults)
+
+# get 3D distance
+z = numpy.tile(finite_fault[:, 4], (1, 1))
+xyz_dist = (dist ** 2 + z ** 2) ** 0.5
+Rrupt = xyz_dist.min(axis=1)
+
+print(Rrupt)'''
