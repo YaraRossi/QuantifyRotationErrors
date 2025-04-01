@@ -116,7 +116,7 @@ def attitude_equation_simple(dt=0, obs_rate = '', earth_rr = ''):
                              rot_vec(phi=phi, theta=theta, psi=psi, data=earth_rr))
         ###############
         # Euler rates without correction for Earth's rotation
-        phi, theta = euler_a[0, i], euler_a[1, i] # Get nows Euler angles
+        phi, theta = euler_a[0, i], euler_a[1, i] # Get current Euler angles
         # Earth rotation rate is subtracted before applying the attitude correction for the signal.
         euler_rr[:, i] = matrix_AE(phi=phi, theta=theta).dot(obs_rate[:, i] - earth_rr)
 
