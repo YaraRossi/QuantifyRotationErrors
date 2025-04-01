@@ -48,7 +48,7 @@ for i, ch, dir, tickloc, tickloc_, ylim, ylim_ in zip(range(3),['HJE','HJN','HJZ
                                          [0.001, 0.001, 0.001],tickloc_rad, [0.0013, 0.0013, 0.0013], [0.00023, 0.00023,0.00023]):
     # rotation rate
     ax = axs[i]
-    color='pink'
+    color='deeppink'
     trace = obs_rate.select(channel=ch)
     ax.plot(trace[0].times(), trace[0].data, color, linewidth=0.6) #, label='Mw 7.4, Hualien, %s' %station_name)
     ax.tick_params(axis='y', labelcolor=color)
@@ -56,7 +56,7 @@ for i, ch, dir, tickloc, tickloc_, ylim, ylim_ in zip(range(3),['HJE','HJN','HJZ
     ax.yaxis.set_major_locator(MultipleLocator(tickloc))
     # angles
     ax_ = ax.twinx()
-    color='deeppink'
+    color='rebeccapurple'
     trace = obs_angle.select(channel=ch)
     ax_.plot(trace[0].times(), trace[0].data, color, linestyle='--', linewidth=0.6)
     ax_.tick_params(axis='y', labelcolor=color)

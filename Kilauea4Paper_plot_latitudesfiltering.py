@@ -9,17 +9,22 @@ root_save = '%s/Latitudes' % root_processeddata
 
 NAME = ['obs_angle' ,'obs_rr', 'euler_angle' ,'euler_angle_err', 'euler_rr', 'euler_rr_err']
 
-date = '2018_07_12T05_12_26_921263Z'#'2018_07_13T00_41_57_000000Z' #'2018_07_12T05_12_15_000000Z'
+date = '2018_07_12T05_12_26_926451Z' #'2018_07_12T05_12_26_921263Z'#'2018_07_13T00_41_57_000000Z' #'2018_07_12T05_12_15_000000Z'
 freq = 0.1
 ss = 20
 fig1, axs1 = plt.subplots(3,2, figsize=(9,5), sharex=True, sharey=True)
 plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98, top=0.84)
-#plt.suptitle('Rotation Angle')
+for j in range(2):
+    for i in range(3):
+        axs1[i, j].grid(True)
 fig2, axs2 = plt.subplots(3,2, figsize=(9,5), sharex=True, sharey=True)
 plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98, top=0.84)
-#plt.suptitle('Rotation Rate')
+for j in range(2):
+    for i in range(3):
+        axs2[i, j].grid(True)
 
-for latitude in [0,15,20,30,45,60,75,90]:
+#for latitude in [0,15,20,30,45,60,75,90]:
+for latitude in [0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 85, 90]:
 
     # Load Data
     obs_angle = read('%s/Kilauea_%s_1_lat%s_obs_angle_HJE.mseed' %(root_save,date,latitude))
@@ -89,15 +94,15 @@ for latitude in [0,15,20,30,45,60,75,90]:
         max_obs_angle_hp = max(abs(obs_angle_hp.select(channel=ch)[0].data))
         diff1 = max(abs(obs_angle_hp.select(channel=ch)[0].data - euler_angle_hp.select(channel=ch)[0].data))
         diff2 = max(abs(obs_angle_hp.select(channel=ch)[0].data - rot_angle_err_hp.select(channel=ch)[0].data))
-        ax.scatter(latitude,diff1/max_obs_angle_hp*100, s=s, marker='d', c='red')
-        ax.scatter(latitude,diff2/max_obs_angle_hp*100, s=s, marker='*', c='k')
+        ax.scatter(latitude,diff1/max_obs_angle_hp*100, s=s, marker='d', c='red', zorder=10)
+        ax.scatter(latitude,diff2/max_obs_angle_hp*100, s=s, marker='*', c='k', zorder=10)
     # lowpass
     for ch,ax in zip(['HJE','HJN','HJZ'],[axs1[0,1],axs1[1,1],axs1[2,1]]):
         max_obs_angle_lp = max(abs(obs_angle_lp.select(channel=ch)[0].data))
         diff1 = max(abs(obs_angle_lp.select(channel=ch)[0].data - euler_angle_lp.select(channel=ch)[0].data))
         diff2 = max(abs(obs_angle_lp.select(channel=ch)[0].data - rot_angle_err_lp.select(channel=ch)[0].data))
-        ax.scatter(latitude,diff1/max_obs_angle_lp*100, s=s, marker='d', c='red')
-        ax.scatter(latitude,diff2/max_obs_angle_lp*100, s=s, marker='*', c='k')
+        ax.scatter(latitude,diff1/max_obs_angle_lp*100, s=s, marker='d', c='red', zorder=10)
+        ax.scatter(latitude,diff2/max_obs_angle_lp*100, s=s, marker='*', c='k', zorder=10)
 
     ### Rotationrate
     # highpass
@@ -105,15 +110,15 @@ for latitude in [0,15,20,30,45,60,75,90]:
         max_obs_rr_hp = max(abs(obs_rr_hp.select(channel=ch)[0].data))
         diff1 = max(abs(obs_rr_hp.select(channel=ch)[0].data - euler_rr_hp.select(channel=ch)[0].data))
         diff2 = max(abs(obs_rr_hp.select(channel=ch)[0].data - rot_rr_err_hp.select(channel=ch)[0].data))
-        ax.scatter(latitude, diff1/max_obs_rr_hp*100, s=s, marker='d', c='red')
-        ax.scatter(latitude, diff2/max_obs_rr_hp*100, s=s, marker='*', c='k')
+        ax.scatter(latitude, diff1/max_obs_rr_hp*100, s=s, marker='d', c='red', zorder=10)
+        ax.scatter(latitude, diff2/max_obs_rr_hp*100, s=s, marker='*', c='k', zorder=10)
     # lowpass
     for ch, ax in zip(['HJE', 'HJN', 'HJZ'], [axs2[0, 1], axs2[1, 1], axs2[2, 1]]):
         max_obs_rr_lp = max(abs(obs_rr_lp.select(channel=ch)[0].data))
         diff1 = max(abs(obs_rr_lp.select(channel=ch)[0].data - euler_rr_lp.select(channel=ch)[0].data))
         diff2 = max(abs(obs_rr_lp.select(channel=ch)[0].data - rot_rr_err_lp.select(channel=ch)[0].data))
-        ax.scatter(latitude, diff1/max_obs_rr_lp*100, s=s, marker='d', c='red')
-        ax.scatter(latitude, diff2/max_obs_rr_lp*100, s=s, marker='*', c='k')
+        ax.scatter(latitude, diff1/max_obs_rr_lp*100, s=s, marker='d', c='red', zorder=10)
+        ax.scatter(latitude, diff2/max_obs_rr_lp*100, s=s, marker='*', c='k', zorder=10)
 
 
 for ax in [axs1,axs2]:

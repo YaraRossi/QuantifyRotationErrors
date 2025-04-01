@@ -1,6 +1,7 @@
 import numpy
 from obspy import read, read_inventory, UTCDateTime
 import matplotlib.pyplot as plt
+from matplotlib.ticker import LogLocator, LogFormatter
 from functions import eq_kilauea,filter_plotly_maxy_Kilauea_v2, filter_plotly_maxy_Hualien_v2
 from roots import get_roots, get_rootsHualien
 Hroot_originaldata, Hroot_savefig, Hroot_processeddata = get_rootsHualien()
@@ -133,11 +134,14 @@ for station_name, Lat, response in zip(['NA01', 'MDSA0'],[24.46760, 24.02305], [
 # Now plot the error over max displacement etc.
 color = ['red', 'k', 'grey']
 marker = ['d', '*', '.']
-labels = ['misorientation rot.', 'rot + spin rc', 'misorientation rot. + spin rc']
+labels = ['misorientation rot.', 'rot. + spin rc', 'misorientation rot. + spin rc']
 # euler_a_all_lp, rot_a_err_all_lp, euler_a_err_all_lp
 # Rotation
 fig, axs = plt.subplots(3,2, figsize=(11,5), sharex='col')
 plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98, top=0.84)
+for j in range(2):
+    for i in range(3):
+        axs[i, j].grid(True)
 # Kilauea
 for neq in range(len(max_rot_hp)):
     absolut_hp = numpy.asarray(max_rot_hp[neq][1])
@@ -146,8 +150,8 @@ for neq in range(len(max_rot_hp)):
         maximum_error_hp = numpy.asarray(max_rot_hp[neq][j])
         maximum_error_lp = numpy.asarray(max_rot_lp[neq][j])
         for i in range(3):
-            axs[i,0].scatter(abs(absolut_hp[i]), abs(maximum_error_hp[i])/abs(absolut_hp[i])*100, color=color[j-1], marker=marker[j-1], s=20)
-            axs[i,1].scatter(abs(absolut_lp[i]), abs(maximum_error_lp[i])/abs(absolut_lp[i])*100, color=color[j-1], marker=marker[j-1], s=20)
+            axs[i,0].scatter(abs(absolut_hp[i]), abs(maximum_error_hp[i])/abs(absolut_hp[i])*100, color=color[j-1], marker=marker[j-1], s=20, zorder=10)
+            axs[i,1].scatter(abs(absolut_lp[i]), abs(maximum_error_lp[i])/abs(absolut_lp[i])*100, color=color[j-1], marker=marker[j-1], s=20, zorder=10)
 # Hualien
 for neq in range(len(Hmax_rot_hp)):
     absolut_hp = numpy.asarray(Hmax_rot_hp[neq][1])
@@ -156,8 +160,8 @@ for neq in range(len(Hmax_rot_hp)):
         maximum_error_hp = numpy.asarray(Hmax_rot_hp[neq][j])
         maximum_error_lp = numpy.asarray(Hmax_rot_lp[neq][j])
         for i in range(3):
-            axs[i,0].scatter(abs(absolut_hp[i]), abs(maximum_error_hp[i])/abs(absolut_hp[i])*100, color=color[j-1], marker=marker[j-1], s=80)
-            axs[i,1].scatter(abs(absolut_lp[i]), abs(maximum_error_lp[i])/abs(absolut_lp[i])*100, color=color[j-1], marker=marker[j-1], s=80)
+            axs[i,0].scatter(abs(absolut_hp[i]), abs(maximum_error_hp[i])/abs(absolut_hp[i])*100, color=color[j-1], marker=marker[j-1], s=80, zorder=10)
+            axs[i,1].scatter(abs(absolut_lp[i]), abs(maximum_error_lp[i])/abs(absolut_lp[i])*100, color=color[j-1], marker=marker[j-1], s=80, zorder=10)
 
 axs[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
 axs[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
@@ -171,6 +175,9 @@ if minmag <4:
         for i in range(3):
             axs[i, j].set_yscale('log')
             axs[i, j].set_xscale('log')
+            #axs[i, j].yaxis.set_major_locator(LogLocator(base=10, subs=[1.0]))
+            #axs[i, j].yaxis.set_major_formatter(LogFormatter(base=10, labelOnlyBase=True))
+            #axs[i, j].yaxis.set_minor_locator(LogLocator(base=10, subs=numpy.arange(1, 10)))
 
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
 fig.legend(handles=custom_lines, loc='upper right', ncol=len(labels))
@@ -182,9 +189,12 @@ fig.savefig('%s/Angle_error_M%s_4paperKH.png' %(root_savefig,minmag), dpi=300, b
 #disp_obs_demean_lp, disp_obs_rc_lp, disp_euler_rc_lp, disp_rot_err_rc_lp, disp_euler_err_rc_lp
 color = ['cornflowerblue', 'red', 'k', 'grey']
 marker = ['D', 'd', '*', '.']
-labels = ['rot', 'misorientation rot.', 'rot + spin rc', 'misorientation rot. + spin rc']
+labels = ['rot.', 'misorientation rot.', 'rot. + spin rc', 'misorientation rot. + spin rc']
 fig, axs = plt.subplots(3,2, figsize=(11,5), sharex=True, sharey=True)
 plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98, top=0.84)
+for j in range(2):
+    for i in range(3):
+        axs[i, j].grid(True)
 # Kilauea
 for neq in range(len(max_disp_hp)):
     absolut_hp = numpy.asarray(max_disp_hp[neq][1])
@@ -193,8 +203,8 @@ for neq in range(len(max_disp_hp)):
         maximum_error_hp = numpy.asarray(max_disp_hp[neq][j])
         maximum_error_lp = numpy.asarray(max_disp_lp[neq][j])
         for i in range(3):
-            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp[i])/abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20)
-            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp[i])/abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20)
+            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp[i])/abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20, zorder=10)
+            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp[i])/abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20, zorder=10)
 # Hualien
 for neq in range(len(Hmax_disp_hp)):
     absolut_hp = numpy.asarray(Hmax_disp_hp[neq][1])
@@ -203,11 +213,11 @@ for neq in range(len(Hmax_disp_hp)):
         maximum_error_hp = numpy.asarray(Hmax_disp_hp[neq][j])
         maximum_error_lp = numpy.asarray(Hmax_disp_lp[neq][j])
         for i in range(3):
-            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp[i])/abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80)
-            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp[i])/abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80)
+            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp[i])/abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80, zorder=10)
+            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp[i])/abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80, zorder=10)
 
-axs[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
-axs[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
+axs[0, 0].set_title('a) displacement, highpass 0.1 Hz', loc='left')
+axs[0, 1].set_title('b) displacement, lowpass 0.1 Hz', loc='left')
 axs[0, 0].set_ylabel('East error [%]')
 axs[1, 0].set_ylabel('North error [%]')
 axs[2, 0].set_ylabel('Up error [%]')
@@ -218,6 +228,13 @@ if minmag <4:
         for i in range(3):
             axs[i, j].set_yscale('log')
             axs[i, j].set_xscale('log')
+            #axs[i, j].set_yticks([0.1,1,10, 100])
+            #axs[i, j].minorticks_on()
+            #axs[i, j].yaxis.set_major_locator(LogLocator(base=10, subs=[1.0]))
+            #axs[i, j].yaxis.set_major_formatter(LogFormatter(base=10, labelOnlyBase=True))
+            axs[i, j].yaxis.set_major_locator(LogLocator(numticks=9))
+            axs[i, j].yaxis.set_minor_locator(LogLocator(subs='all', numticks=9))
+            #axs[i, j].tick_params(axis='y', which='minor', length=4)
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
 fig.legend(handles=custom_lines, loc='upper right', ncol=len(labels))
 
@@ -226,9 +243,12 @@ fig.savefig('%s/Disp_error_M%s_4paperKH.png' %(root_savefig,minmag), dpi=300, bb
 # acc_obs_demean_lp, acc_obs_rc_m_lp, acc_euler_rc_m_lp, acc_rot_err_rc_m_lp, acc_euler_err_rc_m_lp
 color = ['cornflowerblue', 'red', 'k', 'grey']
 marker = ['D', 'd', '*', '.']
-labels = ['rot', 'misorientation rot.', 'rot + spin rc', 'misorientation rot. + spin rc']
+labels = ['rot.', 'misorientation rot.', 'rot. + spin rc', 'misorientation rot. + spin rc']
 fig, axs = plt.subplots(3,2, figsize=(11,5), sharex=True, sharey=True)
 plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98, top=0.84)
+for j in range(2):
+    for i in range(3):
+        axs[i, j].grid(True)
 # Kilauea
 for neq in range(len(max_acc_hp)):
     absolut_hp = numpy.asarray(max_acc_hp[neq][1])
@@ -237,8 +257,8 @@ for neq in range(len(max_acc_hp)):
         maximum_error_hp = numpy.asarray(max_acc_hp[neq][j])
         maximum_error_lp = numpy.asarray(max_acc_lp[neq][j])
         for i in range(3):
-            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp[i])/ abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20)
-            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp[i])/ abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20)
+            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp[i])/ abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20, zorder=10)
+            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp[i])/ abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=20, zorder=10)
 # Hualien
 for neq in range(len(Hmax_acc_hp)):
     absolut_hp = numpy.asarray(Hmax_acc_hp[neq][1])
@@ -247,11 +267,11 @@ for neq in range(len(Hmax_acc_hp)):
         maximum_error_hp = numpy.asarray(Hmax_acc_hp[neq][j])
         maximum_error_lp = numpy.asarray(Hmax_acc_lp[neq][j])
         for i in range(3):
-            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp[i])/ abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80)
-            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp[i])/ abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80)
+            axs[i, 0].scatter(abs(absolut_hp[i]),abs(maximum_error_hp[i])/ abs(absolut_hp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80, zorder=10)
+            axs[i, 1].scatter(abs(absolut_lp[i]),abs(maximum_error_lp[i])/ abs(absolut_lp[i]) * 100,color=color[j - 2], marker=marker[j - 2], s=80, zorder=10)
 
-axs[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
-axs[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
+axs[0, 0].set_title('a) acceleration, highpass 0.1 Hz', loc='left')
+axs[0, 1].set_title('b) acceleration, lowpass 0.1 Hz', loc='left')
 axs[0, 0].set_ylabel('East error [%]')
 axs[1, 0].set_ylabel('North error [%]')
 axs[2, 0].set_ylabel('Up error [%]')
@@ -262,6 +282,13 @@ if minmag <4:
         for i in range(3):
             axs[i, j].set_yscale('log')
             axs[i, j].set_xscale('log')
+            #axs[i, j].set_yticks([0.1,1,10, 100])
+            #axs[i, j].minorticks_on()
+            #axs[i, j].yaxis.set_major_locator(LogLocator(base=10, subs=[1.0]))
+            #axs[i, j].yaxis.set_major_formatter(LogFormatter(base=10, labelOnlyBase=True))
+            axs[i, j].yaxis.set_major_locator(LogLocator(numticks=9))
+            axs[i, j].yaxis.set_minor_locator(LogLocator(subs='all', numticks=9))
+            #axs[i, j].tick_params(axis='y', which='minor', length=4)
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
 fig.legend(handles=custom_lines, loc='upper right', ncol=len(labels))
 
