@@ -7,7 +7,7 @@ from obspy import read, read_inventory, UTCDateTime
 import matplotlib.pyplot as plt
 from numpy import mean
 from attitudeequation import earth_rotationrate, attitude_equation_simple
-from functions import eq_kilauea, makeAnglesKilauea_lat_v3, correctAccelerationKilauea_v2,filter_plotly_maxy_Kilauea,filter_plotly_maxy_Kilauea_v2
+from functions import eq_kilauea, makeAnglesKilauea_lat_v3, correctAccelerationKilauea_v2,filter_plotly_maxy_Kilauea_v2
 from roots import get_roots
 root_originaldata, root_savefig, root_processeddata = get_roots()
 
@@ -20,7 +20,7 @@ root_originaldata, root_savefig, root_processeddata = get_roots()
 minmag = 3
 ml318 = True
 
-info_eq = eq_kilauea(min_mag=minmag, paper=False)
+info_eq = eq_kilauea(min_mag=minmag, paper=True)
 ampscale=1
 
 # get start and end times of Earthquakes:
@@ -60,12 +60,12 @@ for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, en
     try:
         makeAnglesKilauea_lat_v3(date_name,starttime,endtime,latitude=19.420908, ampscale=1,
                                  plot=False, savedate=True, folder='All_EQ')
-        '''if magnitude > 4:
+        if magnitude > 4:
             for ampscale in [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]:
                 makeAnglesKilauea_lat_v3(date_name, starttime, endtime, latitude=19.420908, ampscale=ampscale,
                                          plot=False, savedate=True, folder='Scaling')
 
-            for latitude in [0, 15, 20, 30, 45, 60, 75, 90]:
+            for latitude in [0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 85, 90]:
                 makeAnglesKilauea_lat_v3(date_name, starttime, endtime, latitude=latitude, ampscale=1, plot=False,
                                          savedate=True, folder='Latitudes')
         elif '2018-07-12T05:12' in str(starttime):
@@ -74,9 +74,9 @@ for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, en
                 makeAnglesKilauea_lat_v3(date_name, starttime, endtime, latitude=19.420908, ampscale=ampscale,
                                          plot=False, savedate=True, folder='Scaling')
 
-            for latitude in [0, 15, 20, 30, 45, 60, 75, 90]:
+            for latitude in [0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 85, 90]:
                 makeAnglesKilauea_lat_v3(date_name, starttime, endtime, latitude=latitude, ampscale=1, plot=False,
-                                         savedate=True, folder='Latitudes')'''
+                                         savedate=True, folder='Latitudes')
 
     except:
         print('no data for times: ' + date_name)
