@@ -58,7 +58,7 @@ ax[1].text(x=0.062,y=8.5*1e-12,rotation= 59,s='M6 - 2000 km',c='brown', size=siz
 # text for specifics:
 
 ax[0].text(x=0.012,y=gravi*1.2,s='Gravity',c='blue', size=size)
-ax[1].text(x=0.012,y=1.3e-4,s='Earth spin',c='blue', size=size)
+ax[1].text(x=0.012,y=1.3e-4,s='Earth\'s spin',c='blue', size=size)
 ax[1].text(x=0.012,y=5e-9,s='blueSeis-3A\nself noise',c='red', size=size)
 
 
@@ -161,7 +161,7 @@ ax2.text(x=10, y=1.2 * 1e-6, rotation=20, s='M1.5 - 10 km', c='k', size=size)
 ax2.text(x=0.012, y=8.5 * 1e-12, rotation=59, s='M8', c='brown', size=size)
 ax2.text(x=0.025, y=8.5 * 1e-12, rotation=59, s='M7', c='brown', size=size)
 ax2.text(x=0.062, y=8.5 * 1e-12, rotation=59, s='M6 - 2000 km', c='brown', size=size)
-ax2.text(x=0.012, y=1.3e-4, s='Earth spin', c='blue', size=size)
+ax2.text(x=0.012, y=1.3e-4, s='Earth\'s spin', c='blue', size=size)
 ax2.text(x=0.012, y=5e-9, s='blueSeis-3A\nself noise', c='red', size=size)
 
 # Legend
@@ -182,8 +182,8 @@ ax2.set_xlim(left=0.01, right=100)
 # adding a specific EQ
 plt.scatter(4, 0.006, marker='*', color='darkred', edgecolors='k', s=150)
 ax2.text(x=1.2, y=0.005, s='Mw 5.3', c='darkred', size=size)
-plt.scatter(4, 0.0015, marker='*', color='pink', edgecolors='k', s=150)
-ax2.text(x=1.2, y=0.00065, s='Mw 7.4', c='pink', size=size)
+plt.scatter(4, 0.0015, marker='*', color='deeppink', edgecolors='k', s=150)
+ax2.text(x=1.2, y=0.00065, s='Mw 7.4', c='deeppink', size=size)
 
 plt.savefig(f'{root_savefig}/thesis_magamp_rotation.png', dpi=300, bbox_inches='tight')
 
