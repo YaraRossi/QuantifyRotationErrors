@@ -1,8 +1,11 @@
 import os
 import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
+import numpy
 from obspy import read, read_inventory
 from numpy import mean, sqrt
 from roots import get_roots, get_rootsHualien
+from matplotlib.ticker import LogLocator, LogFormatter
 Hroot_originaldata, Hroot_savefig, Hroot_processeddata = get_rootsHualien()
 root_originaldata, root_savefig, root_processeddata = get_roots()
 
@@ -31,6 +34,12 @@ plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98, top=0.84)
 for j in range(2):
     for i in range(3):
         axs2[i, j].grid(True)
+
+fig3, axs3 = plt.subplots(1,2, figsize=(9,3), sharey=True, sharex=True)
+plt.subplots_adjust(wspace=0.07, right=0.98, top=0.73)
+for ax in axs3:
+    ax.set_xlim(left = 1e-6, right = 2e-2)
+    ax.set_ylim(top=3e1, bottom=1e-4)
 
 ####################################################################################################################
 ########################################## Data processing for Kilauea EQ's ########################################
@@ -123,6 +132,8 @@ for ampscale in [0.001,0.01,0.1,1,10,100,1000]:
                             diff2 = max(abs(obs_angle_hp.select(channel=ch)[0].data - rot_angle_err_hp.select(channel=ch)[0].data))
                             ax.scatter(y, diff1 / max_obs_angle_hp * 100, s=s, marker='d', c=color2, zorder=10)
                             ax.scatter(y, diff2 / max_obs_angle_hp * 100, s=s, marker='*', c=color1, zorder=10)
+                            axs3[0].scatter(y, diff1 / max_obs_angle_hp * 100, s=int(s/2), marker='d', c='dimgrey', zorder=10)
+                            axs3[0].scatter(y, diff2 / max_obs_angle_hp * 100, s=int(s/2), marker='*', c='dimgrey', zorder=10)
                         # lowpass
                         for ch, ax, ch1, ch2 in zip(['HJE', 'HJN', 'HJZ'], [axs1[0, 1], axs1[1, 1], axs1[2, 1]], ['HJN','HJE','HJE'], ['HJZ','HJZ','HJN']):
                             max_obs_angle_lp = max(abs(obs_angle_lp.select(channel=ch)[0].data))
@@ -131,6 +142,8 @@ for ampscale in [0.001,0.01,0.1,1,10,100,1000]:
                             diff2 = max(abs(obs_angle_lp.select(channel=ch)[0].data - rot_angle_err_lp.select(channel=ch)[0].data))
                             ax.scatter(y, diff1 / max_obs_angle_lp * 100, s=s, marker='d', c=color2, zorder=10)
                             ax.scatter(y, diff2 / max_obs_angle_lp * 100, s=s, marker='*', c=color1, zorder=10)
+                            axs3[1].scatter(y, diff1 / max_obs_angle_hp * 100, s=int(s/2), marker='d', c='dimgrey', zorder=10)
+                            axs3[1].scatter(y, diff2 / max_obs_angle_hp * 100, s=int(s/2), marker='*', c='dimgrey', zorder=10)
 
                         ### Rotationrate
                         # highpass
@@ -328,6 +341,8 @@ if withother:
                 diff2 = max(abs(obs_angle_hp.select(channel=ch)[0].data - rot_angle_err_hp.select(channel=ch)[0].data))
                 ax.scatter(y, diff1 / max_obs_angle_hp * 100, s=s, marker='d', c=color2, zorder=10)
                 ax.scatter(y, diff2 / max_obs_angle_hp * 100, s=s, marker='*', c=color1, zorder=10)
+                axs3[0].scatter(y, diff1 / max_obs_angle_hp * 100, s=int(s/2), marker='d', c='dimgrey', zorder=10)
+                axs3[0].scatter(y, diff2 / max_obs_angle_hp * 100, s=int(s/2), marker='*', c='dimgrey', zorder=10)
             # lowpass
             for ch, ax, ch1, ch2 in zip(['HJE', 'HJN', 'HJZ'], [axs1[0, 1], axs1[1, 1], axs1[2, 1]], ['HJN','HJE','HJE'], ['HJZ','HJZ','HJN']):
                 max_obs_angle_lp = max(abs(obs_angle_lp.select(channel=ch)[0].data))
@@ -336,6 +351,8 @@ if withother:
                 diff2 = max(abs(obs_angle_lp.select(channel=ch)[0].data - rot_angle_err_lp.select(channel=ch)[0].data))
                 ax.scatter(y, diff1 / max_obs_angle_lp * 100, s=s, marker='d', c=color2, zorder=10)
                 ax.scatter(y, diff2 / max_obs_angle_lp * 100, s=s, marker='*', c=color1, zorder=10)
+                axs3[1].scatter(y, diff1 / max_obs_angle_lp * 100, s=int(s/2), marker='d', c='dimgrey', zorder=10)
+                axs3[1].scatter(y, diff2 / max_obs_angle_lp * 100, s=int(s/2), marker='*', c='dimgrey', zorder=10)
 
             ### Rotationrate
             # highpass
@@ -361,6 +378,8 @@ for ax, unit in zip([axs1,axs2],['[rad]','[rad/s]']):
         for i in range(3):
             ax[i, j].set_yscale('log')
             ax[i, j].set_xscale('log')
+            ax[i, j].yaxis.set_major_locator(LogLocator(numticks=5))
+            ax[i, j].yaxis.set_minor_locator(LogLocator(subs='all', numticks=5))
             if i == 2:
                 continue
             ax[i, j].tick_params(axis='x', labelcolor='white')
@@ -382,12 +401,64 @@ custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle
 fig2.legend(handles=custom_lines, loc='upper right', ncol=int(len(labels)/2))
 fig1.legend(handles=custom_lines, loc='upper right', ncol=int(len(labels)/2))
 
+
+
+############# Summary figure
+# high frequency
+x = numpy.asarray([1.8e-8,0.018])
+x_2 = numpy.asarray([1.8e-8,0.02])
+y_1 = numpy.asarray([1,1])
+y_espin = numpy.asarray([0.0016,0.0016])
+y_misor = numpy.asarray([1.6e-6,1.6])
+
+axs3[0].loglog(x_2,y_1, color = 'lightblue', linestyle='-', label='1 % error', zorder = 20)
+axs3[0].loglog(x_2,y_espin, color = 'black', linestyle='-.', label=r"rot. + spin rc", zorder = 20)
+axs3[0].loglog(x,y_misor, color = 'red', linestyle='--', label='misorientation rot.', zorder = 20)
+axs3[0].set_title('a) highpass 0.1 Hz', loc='left')
+axs3[0].set_xlabel('total angle $\sqrt{E^2+N^2+Z^2}$ [rad]')
+axs3[0].set_ylabel('Error [%]')
+axs3[0].axvspan(0.01125, 1, color='grey', alpha=0.5, lw=0, label='correction necessary', zorder = 0)
+
+# legend
+color = ['lightblue', 'red', 'k', 'grey', 'dimgrey', 'dimgrey']
+linestyle = ['-', '--', '-.', 'None', 'None', 'None']  # Use '-' only for linestyle
+marker = [None, None, None, '*', 'd', '*']  # Use None for markers where linestyle is needed
+labels = ['1 % error', 'scaled (misorientation rot.)', 'scaled (rot. + spin rc)', 'correction needed', 'observed (misorientation rot.)', 'observed (rot. + spin rc)']
+custom_lines = [
+    plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle=linestyle[i], label=labels[i])
+    for i in range(len(labels)) if color[i] != 'grey']
+shaded_patch = Patch(facecolor='grey', alpha=0.5, label='correction needed')
+custom_lines.insert(0, shaded_patch)
+fig3.legend(handles=custom_lines, loc='upper right', ncol=int(len(labels)/2))
+#axs3[0].legend(loc='upper left').set_zorder(30)
+
+# low frequency
+x = numpy.asarray([1.35e-9,0.00135])
+x_2 = numpy.asarray([1.35e-9,0.02])
+y_1 = numpy.asarray([1,1])
+y_espin = numpy.asarray([0.246,0.246])
+y_misor = numpy.asarray([2.5e-5,24.8])
+
+axs3[1].loglog(x_2,y_1, color = 'lightblue', linestyle='-', label='1 % error', zorder = 20)
+axs3[1].loglog(x_2,y_espin, color = 'black', linestyle='-.', label=r"rot. + spin rc", zorder = 20)
+axs3[1].loglog(x,y_misor, color = 'red', linestyle='--', label='misorientation rot.', zorder = 20)
+axs3[1].set_title('b) lowpass 0.1 Hz', loc='left')
+axs3[1].set_xlabel('total angle $\sqrt{E^2+N^2+Z^2}$ [rad]')
+axs3[1].axvspan(5.44e-5, 1, color='grey', alpha=0.5, lw=0, zorder = 0)
+
+for ax in axs3:
+    ax.yaxis.set_major_locator(LogLocator(numticks=7))
+    ax.yaxis.set_minor_locator(LogLocator(subs='all', numticks=7))
+
+
 if withother:
-    fig1.savefig('%s/KilHua_%s_ScalingFiltering_a_add.png' % (root_savefig, date), dpi=300)
-    fig2.savefig('%s/KilHua_%s_ScalingFiltering_rr_add.png' % (root_savefig, date), dpi=300)
+    fig1.savefig('%s/KilHua_%s_ScalingFiltering_a_add.png' % (root_savefig, date), dpi=300, bbox_inches='tight')
+    fig2.savefig('%s/KilHua_%s_ScalingFiltering_rr_add.png' % (root_savefig, date), dpi=300, bbox_inches='tight')
+    fig3.savefig('%s/KilHua_%s_ScalingFiltering_summary_a_add.png' % (root_savefig, date), dpi=300, bbox_inches='tight')
 else:
-    fig1.savefig('%s/KilHua_%s_ScalingFiltering_a.png' %(root_savefig,date), dpi=300)
-    fig2.savefig('%s/KilHua_%s_ScalingFiltering_rr.png' %(root_savefig,date), dpi=300)
+    fig1.savefig('%s/KilHua_%s_ScalingFiltering_a.png' %(root_savefig,date), dpi=300, bbox_inches='tight')
+    fig2.savefig('%s/KilHua_%s_ScalingFiltering_rr.png' %(root_savefig,date), dpi=300, bbox_inches='tight')
+    fig3.savefig('%s/KilHua_%s_ScalingFiltering_summary_a.png' % (root_savefig, date), dpi=300, bbox_inches='tight')
 
 plt.show()
 
