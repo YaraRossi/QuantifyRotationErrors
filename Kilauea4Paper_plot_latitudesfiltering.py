@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from obspy import read
 from roots import get_roots
+from matplotlib.ticker import LogLocator, LogFormatter
 root_originaldata, root_savefig, root_processeddata = get_roots()
 
 root_save = '%s/Latitudes' % root_processeddata
@@ -127,6 +128,8 @@ for ax in [axs1,axs2]:
             ax[i, j].set_yscale('log')
             #ax[i, j].axvline(x=19.420908, c='grey',linestyle='--')
             #ax[i, j].set_xscale('log')
+            ax[i, j].yaxis.set_major_locator(LogLocator(numticks=9))
+            ax[i, j].yaxis.set_minor_locator(LogLocator(subs='all', numticks=9))
 
     ax[0, 0].set_title('a) highpass 0.1 Hz', loc='left')
     ax[0, 1].set_title('b) lowpass 0.1 Hz', loc='left')
