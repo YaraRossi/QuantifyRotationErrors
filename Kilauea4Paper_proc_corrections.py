@@ -58,7 +58,7 @@ ts_acc_lp = []
 ts_acc_hp = []
 for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, endtime, magnitude, distance):
     try:
-        makeAnglesKilauea_lat_v3(date_name,starttime,endtime,latitude=19.420908, ampscale=1,
+        '''makeAnglesKilauea_lat_v3(date_name,starttime,endtime,latitude=19.420908, ampscale=1,
                                  plot=False, savedate=True, folder='All_EQ')
         if magnitude > 4:
             for ampscale in [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]:
@@ -76,12 +76,12 @@ for date_name, starttime, endtime, magnitude, distance in zip(date,starttime, en
 
             for latitude in [0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 85, 90]:
                 makeAnglesKilauea_lat_v3(date_name, starttime, endtime, latitude=latitude, ampscale=1, plot=False,
-                                         savedate=True, folder='Latitudes')
+                                         savedate=True, folder='Latitudes')'''
 
     except:
         print('no data for times: ' + date_name)
         continue
-    continue
+    #continue
 
     print('Now perform the corrections on the accelerations')
     try:
@@ -124,7 +124,7 @@ marker = ['d','*','.']
 labels = ['euler', 'rot + spin rc', 'euler + spin rc']
 # euler_a_all_lp, rot_a_err_all_lp, euler_a_err_all_lp
 # Rotation
-fig, axs = plt.subplots(3,2, figsize=(11,5), sharex='col')
+fig, axs = plt.subplots(3,2, figsize=(9,5), sharex='col')
 plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
 for neq in range(len(max_rot_hp)):
     absolut_hp = numpy.asarray(max_rot_hp[neq][0])
@@ -160,7 +160,7 @@ fig.savefig('%s/Angle_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbo
 color = ['cornflowerblue','red', 'k', 'grey']
 marker = ['D','d','*','.']
 labels = ['rot', 'euler', 'rot + spin rc', 'euler + spin rc']
-fig, axs = plt.subplots(3,2, figsize=(11,5), sharex='col')
+fig, axs = plt.subplots(3,2, figsize=(9,5), sharex='col')
 plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
 for neq in range(len(max_disp_hp)):
     absolut_hp = numpy.asarray(max_disp_hp[neq][0])
@@ -224,7 +224,7 @@ fig.savefig('%s/Disp2_error_M%s_4paper.png' %(root_savefig,minmag), dpi=300, bbo
 color = ['cornflowerblue','red', 'k', 'grey']
 marker = ['D','d','*','.']
 labels = ['rot', 'euler', 'rot + spin rc', 'euler + spin rc']
-fig, axs = plt.subplots(3,2, figsize=(11,5), sharex='col')
+fig, axs = plt.subplots(3,2, figsize=(9,5), sharex='col')
 plt.subplots_adjust(hspace=0.07, wspace=0.25, right=0.98)
 for neq in range(len(max_acc_hp)):
     absolut_hp = numpy.asarray(max_acc_hp[neq][0])

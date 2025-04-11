@@ -134,10 +134,10 @@ for station_name, Lat, response in zip(['NA01', 'MDSA0'],[24.46760, 24.02305], [
 # Now plot the error over max displacement etc.
 color = ['red', 'k', 'grey']
 marker = ['d', '*', '.']
-labels = ['misorientation rot.', 'rot. + spin rc', 'misorientation rot. + spin rc']
+labels = ['attitude error rc.', 'rot. + spin rc.', 'attitude error + spin rc.']
 # euler_a_all_lp, rot_a_err_all_lp, euler_a_err_all_lp
 # Rotation
-fig, axs = plt.subplots(3,2, figsize=(11,5), sharex='col')
+fig, axs = plt.subplots(3,2, figsize=(9,5), sharex='col')
 plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98, top=0.84)
 for j in range(2):
     for i in range(3):
@@ -189,8 +189,8 @@ fig.savefig('%s/Angle_error_M%s_4paperKH.png' %(root_savefig,minmag), dpi=300, b
 #disp_obs_demean_lp, disp_obs_rc_lp, disp_euler_rc_lp, disp_rot_err_rc_lp, disp_euler_err_rc_lp
 color = ['cornflowerblue', 'red', 'k', 'grey']
 marker = ['D', 'd', '*', '.']
-labels = ['rot.', 'misorientation rot.', 'rot. + spin rc', 'misorientation rot. + spin rc']
-fig, axs = plt.subplots(3,2, figsize=(11,5), sharex=True, sharey=True)
+labels = ['rot.', 'attitude error rc.', 'rot. + spin rc.', 'attitude error + spin rc.']
+fig, axs = plt.subplots(3,2, figsize=(9,5), sharex=True, sharey=True)
 plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98, top=0.84)
 for j in range(2):
     for i in range(3):
@@ -243,8 +243,8 @@ fig.savefig('%s/Disp_error_M%s_4paperKH.png' %(root_savefig,minmag), dpi=300, bb
 # acc_obs_demean_lp, acc_obs_rc_m_lp, acc_euler_rc_m_lp, acc_rot_err_rc_m_lp, acc_euler_err_rc_m_lp
 color = ['cornflowerblue', 'red', 'k', 'grey']
 marker = ['D', 'd', '*', '.']
-labels = ['rot.', 'misorientation rot.', 'rot. + spin rc', 'misorientation rot. + spin rc']
-fig, axs = plt.subplots(3,2, figsize=(11,5), sharex=True, sharey=True)
+labels = ['rot.', 'attitude error rc.', 'rot. + spin rc.', 'attitude error + spin rc.']
+fig, axs = plt.subplots(3,2, figsize=(9,5), sharex=True, sharey=True)
 plt.subplots_adjust(hspace=0.07, wspace=0.07, right=0.98, top=0.84)
 for j in range(2):
     for i in range(3):
