@@ -242,7 +242,7 @@ def makeAnglesKilauea_lat_v3(date_name='date_name', starttime='starttime', endti
                 ax = axs[i,j]
                 ax.plot(MSEED_obs_rr_f.select(channel=ch[i])[0].times(),
                         MSEED_obs_rr_f.select(channel=ch[i])[0].data - MSEED_euler_rr_f.select(channel=ch[i])[0].data,
-                        label='diff obs und misorientation rot.')
+                        label='diff obs und attitude error rc.')
                 ax.plot(MSEED_euler_rr_f.select(channel=ch[i])[0].times(),
                         MSEED_euler_rr_f.select(channel=ch[i])[0].data - MSEED_euler_rr_err_f.select(channel=ch[i])[0].data,
                         '--', label='diff euler und euler earth corr.')
@@ -290,7 +290,7 @@ def makeAnglesKilauea_lat_v3(date_name='date_name', starttime='starttime', endti
                 ax = axs[i, j]
                 ax.plot(MSEED_obs_a_f.select(channel=ch[i])[0].times(),
                         MSEED_obs_a_f.select(channel=ch[i])[0].data - MSEED_euler_a_f.select(channel=ch[i])[0].data,
-                        label='diff obs und misorientation rot.')
+                        label='diff obs und attitude error rc.')
                 ax.plot(MSEED_euler_a_f.select(channel=ch[i])[0].times(),
                         MSEED_euler_a_f.select(channel=ch[i])[0].data - MSEED_euler_a_err_f.select(channel=ch[i])[
                             0].data,
@@ -916,7 +916,7 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
                 plt.suptitle('Timeseries Comparisons for an Ml ' + str(magnitude))
             elif magnitude > 5:
                 plt.suptitle('Timeseries Comparisons for an Mw ' + str(magnitude))
-            x_ticks = ['obs. ', 'obs. \ndemeaned', 'rot.', 'misorientation rot.', 'rot. + spin rc', 'misorientation rot. + spin rc']
+            x_ticks = ['obs. ', 'obs. \ndemeaned', 'rot.', 'attitude error rc.', 'rot. + spin rc.', 'attitude error + spin rc.']
 
             # rotation
             color = ['darkred', 'red', 'tomato', 'lightcoral']
@@ -929,7 +929,7 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
                     ax.plot(time, TS_rot[j][i], linestyle=liner[j], color=color[j], label=x_ticks[2 + j])
             ax.legend(loc='upper left', fontsize=fontsize)
 
-            x_ticks = ['obs.', 'obs. demeaned', 'rc. rot.', 'rc. misorientation rot.', 'rc. rot. + spin rc', 'rc. misorientation rot. + spin rc']
+            x_ticks = ['obs.', 'obs. demeaned', 'rc. rot.', 'rc. attitude error rc.', 'rc. rot. + spin rc.', 'rc. attitude error + spin rc.']
             liner = ['-', (0, (3, 1, 1, 1, 1, 1)), '--', '-.', 'dotted', '-']
             direction = ['East', 'North', 'Up']
             # displacement
@@ -969,7 +969,7 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
                 plt.suptitle('TimeSeries Difference Comparisons for an Ml ' + str(magnitude))
             elif magnitude > 5:
                 plt.suptitle('TimeSeries Difference Comparisons for an Mw ' + str(magnitude))
-            x_ticks = ['obs.', 'obs. \ndemeaned', 'rot.', 'misorientation rot.', 'rot. + spin rc', 'misorientation rot. + spin rc']
+            x_ticks = ['obs.', 'obs. \ndemeaned', 'rot.', 'attitude error rc.', 'rot. + spin rc.', 'attitude error + spin rc.']
 
             # rotation
             color = ['darkred', 'red', 'tomato', 'lightcoral']
@@ -986,7 +986,7 @@ def filter_plotly_maxy_Kilauea_v2(date_name='date_name', starttime='starttime', 
                     #ax.set_ylim(top= top, bottom = bottom)
             ax.legend(loc='upper left', fontsize=fontsize)
 
-            x_ticks = ['obs.', 'obs. demeaned', 'rc. rot.', 'rc. misorientation rot.', 'rc. rot. + spin rc', 'rc. misorientation rot. + spin rc']
+            x_ticks = ['obs.', 'obs. demeaned', 'rc. rot.', 'rc. attitude error rc.', 'rc. rot. + spin rc.', 'rc. attitude error + spin rc.']
             liner = ['-', (0, (3, 1, 1, 1, 1, 1)), '--', '-.', 'dotted', '-']
             direction = ['East', 'North', 'Up']
             # displacement
@@ -1231,7 +1231,7 @@ def makeAnglesHualien_lat_v3(station_name='station_name', starttime='starttime',
                 ax = axs[i,j]
                 ax.plot(MSEED_obs_rr_f.select(channel=ch[i])[0].times(),
                         MSEED_obs_rr_f.select(channel=ch[i])[0].data - MSEED_euler_rr_f.select(channel=ch[i])[0].data,
-                        label='diff obs und misorientation rot.')
+                        label='diff obs und attitude error rc.')
                 ax.plot(MSEED_euler_rr_f.select(channel=ch[i])[0].times(),
                         MSEED_euler_rr_f.select(channel=ch[i])[0].data - MSEED_euler_rr_err_f.select(channel=ch[i])[0].data,
                         '--', label='diff euler und euler earth corr.')
@@ -1279,7 +1279,7 @@ def makeAnglesHualien_lat_v3(station_name='station_name', starttime='starttime',
                 ax = axs[i, j]
                 ax.plot(MSEED_obs_a_f.select(channel=ch[i])[0].times(),
                         MSEED_obs_a_f.select(channel=ch[i])[0].data - MSEED_euler_a_f.select(channel=ch[i])[0].data,
-                        label='diff obs und misorientation rot.')
+                        label='diff obs und attitude error rc.')
                 ax.plot(MSEED_euler_a_f.select(channel=ch[i])[0].times(),
                         MSEED_euler_a_f.select(channel=ch[i])[0].data - MSEED_euler_a_err_f.select(channel=ch[i])[
                             0].data,
@@ -1909,7 +1909,7 @@ def filter_plotly_maxy_Hualien_v2(station_name='station_name', starttime='startt
                 plt.suptitle('Timeseries Comparisons for an Ml ' + str(magnitude))
             elif magnitude > 5:
                 plt.suptitle('Timeseries Comparisons for an Mw ' + str(magnitude))
-            x_ticks = ['obs. ', 'obs. \ndemeaned', 'rot.', 'misorientation rot.', 'rot. + spin rc', 'misorientation rot. + spin rc']
+            x_ticks = ['obs. ', 'obs. \ndemeaned', 'rot.', 'attitude error rc.', 'rot. + spin rc.', 'attitude error + spin rc.']
 
             # rotation
             color = ['darkred', 'red', 'tomato', 'lightcoral']
@@ -1922,7 +1922,7 @@ def filter_plotly_maxy_Hualien_v2(station_name='station_name', starttime='startt
                     ax.plot(time, TS_rot[j][i], linestyle=liner[j], color=color[j], label=x_ticks[2 + j])
             ax.legend(loc='upper left', fontsize=fontsize)
 
-            x_ticks = ['obs.', 'obs. demeaned', 'rc. rot.', 'rc. misorientation rot.', 'rc. rot. + spin rc', 'rc. misorientation rot. + spin rc']
+            x_ticks = ['obs.', 'obs. demeaned', 'rc. rot.', 'rc. attitude error rc.', 'rc. rot. + spin rc.', 'rc. attitude error + spin rc.']
             liner = ['-', (0, (3, 1, 1, 1, 1, 1)), '--', '-.', 'dotted', '-']
             direction = ['East', 'North', 'Up']
             # displacement
@@ -1962,7 +1962,7 @@ def filter_plotly_maxy_Hualien_v2(station_name='station_name', starttime='startt
                 plt.suptitle('Timeseries Difference Comparisons for an Ml ' + str(magnitude))
             elif magnitude > 5:
                 plt.suptitle('Timeseries Difference Comparisons for an Mw ' + str(magnitude))
-            x_ticks = ['rot.', 'misorientation rot.', 'rot. + spin rc', 'misorientation rot. + spin rc']
+            x_ticks = ['rot.', 'attitude error rc.', 'rot. + spin rc.', 'attitude error + spin rc.']
 
             # rotation
             color = ['darkred', 'red', 'tomato', 'lightcoral']
@@ -1977,7 +1977,7 @@ def filter_plotly_maxy_Hualien_v2(station_name='station_name', starttime='startt
                     #ax.axhline(TSmax_rot[j][i], linestyle=(0, (5, 10)), color=color[j])
             ax.legend(loc='upper left', fontsize=fontsize)
 
-            x_ticks = ['obs.', 'obs. demeaned', 'rc. rot.', 'rc. misorientation rot.', 'rc. rot. + spin rc', 'rc. misorientation rot. + spin rc']
+            x_ticks = ['obs.', 'obs. demeaned', 'rc. rot.', 'rc. attitude error rc.', 'rc. rot. + spin rc.', 'rc. attitude error + spin rc.']
             liner = ['-', (0, (3, 1, 1, 1, 1, 1)), '--', '-.', 'dotted', '-']
             direction = ['East', 'North', 'Up']
             # displacement

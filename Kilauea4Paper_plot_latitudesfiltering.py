@@ -143,7 +143,7 @@ for ax in [axs1,axs2]:
 
 color = ['red', 'k']
 marker = ['d', '*']
-labels = ['misorientation rot.', 'rot + spin rc']
+labels = ['attitude error rc.', 'rot + spin rc.']
 custom_lines = [plt.Line2D([0], [0], color=color[i], marker=marker[i], linestyle='', label=labels[i]) for i in range(len(labels))]
 fig2.legend(handles=custom_lines, loc='upper right', ncol=len(labels))
 fig1.legend(handles=custom_lines, loc='upper right', ncol=len(labels))
