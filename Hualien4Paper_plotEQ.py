@@ -6,6 +6,7 @@ from numpy import mean
 from matplotlib.ticker import MultipleLocator
 from roots import get_roots, get_rootsHualien
 
+
 Hroot_originaldata, Hroot_savefig, Hroot_processeddata = get_rootsHualien()
 root_import = '/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/AttitudeEquation/Data'
 root_save = '/Users/yararossi/Documents/Work/Towards_Quantification/3_Projects/AttitudeEquation/Figures_coding/4SSA'
